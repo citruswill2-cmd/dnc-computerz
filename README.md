@@ -1,9 +1,7 @@
 # DNC COMPUTERZ
 
-Dee’s lot. Advertise items for sale. REDLINE first-draft.
+Dee’s lot. Advertise items for sale.
 
-Single `index.html`. Tailwind CDN + anime.js 3.2.2. No build step.
+REDLINE first-draft. Client-owned single HTML file.
 
-Drop the file at the project root on a new Vercel project and ship.
-
-Contact on the live page: dnccomputerz@gmail.com
+Drop `index.html` at the root of a Vercel project. No build step.
