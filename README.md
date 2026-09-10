@@ -1,5 +1,7 @@
 # DNC COMPUTERZ
 
-Dee’s lot page. Single `index.html`. Drop at the project root on Vercel. No build step.
+Client-owned lot page for Dee (dnccomputerz@gmail.com).
 
-Contact: dnccomputerz@gmail.com
+Single `index.html`. Tailwind CDN + anime.js 3.2.2. Drop on Vercel. No build step.
+
+Placeholder SKUs — swap titles, prices, photos, and Open/Hot/Sold.
