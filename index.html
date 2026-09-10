@@ -1,3 +1,16 @@
+<!--
+  DNC COMPUTERZ — v1 lot page
+  Drop this file as index.html at the Vercel project root. No build step.
+
+  CLONE A TICKET:
+  1. Copy one <article class="ticket ..."> block.
+  2. Change data-cat (towers|laptops|parts|screens), data-state (open|hot|sold),
+     #SKU, title, spec line, condition, price sticker, and the mailto subject HOLD%20%23SKU.
+  3. Sold tickets: data-state="sold", sticker text SOLD, drop the Hold link.
+  4. Hot tickets: data-state="hot" and the red Hot chip.
+
+  Contact: dnccomputerz@gmail.com
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -52,7 +65,20 @@
         repeating-linear-gradient(90deg, transparent 0 11px, rgba(77,139,255,.08) 11px 12px),
         repeating-linear-gradient(0deg, transparent 0 11px, rgba(77,139,255,.08) 11px 12px);
     }
-    .fade-ready { opacity: 0; }
+    .rail {
+      background-image: repeating-linear-gradient(90deg, transparent 0 10px, #2A3140 10px 12px);
+      height: 8px;
+    }
+    .punch {
+      width: 10px; height: 10px; border-radius: 999px;
+      background: #080A0D; border: 1px solid #2A3140;
+    }
+    .fade-in { opacity: 0; }
+    @media (prefers-reduced-motion: reduce) {
+      .ticker-track { animation: none; }
+      .fade-in { opacity: 1; }
+      html { scroll-behavior: auto; }
+    }
   </style>
 </head>
 <body class="font-mono antialiased overflow-x-hidden">
@@ -69,7 +95,7 @@
       <a href="mailto:dnccomputerz@gmail.com?subject=DNC%20COMPUTERZ%20ask" class="text-xs uppercase tracking-wider border border-volt text-volt px-3 py-1.5 hover:bg-volt hover:text-pit">Ask Dee</a>
     </div>
   </header>
-  <div class="border-b border-edge overflow-hidden bg-steel text-[11px] tracking-widest uppercase text-mute">
+  <div class="border-b border-edge overflow-hidden bg-steel text-[11px] tracking-widest uppercase text-mute" aria-hidden="true">
     <div class="ticker-track py-2">
       <span class="px-6">#T-1842 OPEN</span><span class="text-volt">/</span>
       <span class="px-6">#L-0911 HOT</span><span class="text-hot">/</span>
@@ -79,6 +105,8 @@
       <span class="px-6">#L-4412 OPEN</span><span class="text-volt">/</span>
       <span class="px-6">#P-1180 HOT</span><span class="text-hot">/</span>
       <span class="px-6">#S-0094 OPEN</span><span class="text-volt">/</span>
+      <span class="px-6">#T-5521 OPEN</span><span class="text-volt">/</span>
+      <span class="px-6">#P-9012 OPEN</span><span class="text-volt">/</span>
       <span class="px-6">#T-1842 OPEN</span><span class="text-volt">/</span>
       <span class="px-6">#L-0911 HOT</span><span class="text-hot">/</span>
       <span class="px-6">#P-3304 OPEN</span><span class="text-volt">/</span>
@@ -86,10 +114,12 @@
       <span class="px-6">#T-0770 SOLD</span><span class="text-hot">/</span>
       <span class="px-6">#L-4412 OPEN</span><span class="text-volt">/</span>
       <span class="px-6">#P-1180 HOT</span><span class="text-hot">/</span>
-      <span class="px-6">#S-0094 OPEN</span>
+      <span class="px-6">#S-0094 OPEN</span><span class="text-volt">/</span>
+      <span class="px-6">#T-5521 OPEN</span><span class="text-volt">/</span>
+      <span class="px-6">#P-9012 OPEN</span>
     </div>
   </div>
-  <section id="top" class="fade-ready relative z-10 px-4 md:px-8 pt-14 md:pt-20 pb-12 max-w-5xl">
+  <section id="top" class="relative z-10 px-4 md:px-8 pt-14 md:pt-20 pb-12 max-w-5xl fade-in">
     <p class="text-volt text-[11px] uppercase tracking-[0.22em] mb-4">Mailbox · DNC Computerz · local lot</p>
     <h1 class="font-display font-extrabold leading-[0.92] text-5xl md:text-7xl tracking-tight">On the bench.<br />Priced. Ready.</h1>
     <p class="mt-6 max-w-xl text-mute leading-relaxed">Towers, laptops, parts, and screens. Each ticket has a SKU, a sticker price, and a Hold button that emails Dee. No cart. No checkout. You hold it, Dee confirms, you pick it up.</p>
@@ -98,113 +128,98 @@
       <a href="mailto:dnccomputerz@gmail.com?subject=DNC%20COMPUTERZ%20ask" class="inline-flex items-center gap-2 border border-edge px-5 py-3 font-display font-bold text-sm hover:border-volt hover:text-volt">Ask Dee</a>
     </div>
   </section>
-  <section id="lot" class="fade-ready relative z-10 px-4 md:px-8 pb-16">
-    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-6">
+  <section id="lot" class="relative z-10 px-4 md:px-8 pb-16 fade-in">
+    <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 mb-6">
       <div>
         <p class="text-[11px] uppercase tracking-widest text-mute">Current lot · placeholder SKUs</p>
         <h2 class="font-display font-extrabold text-3xl md:text-4xl tracking-tight mt-1">What’s on the bench</h2>
       </div>
-      <div id="filters" class="flex flex-wrap gap-2 text-[11px] uppercase tracking-wider">
-        <button type="button" data-filter="all" class="filter-btn active border border-edge px-3 py-1.5">All</button>
-        <button type="button" data-filter="towers" class="filter-btn border border-edge px-3 py-1.5">Towers</button>
-        <button type="button" data-filter="laptops" class="filter-btn border border-edge px-3 py-1.5">Laptops</button>
-        <button type="button" data-filter="parts" class="filter-btn border border-edge px-3 py-1.5">Parts</button>
-        <button type="button" data-filter="screens" class="filter-btn border border-edge px-3 py-1.5">Screens</button>
+      <div class="flex flex-col sm:flex-row gap-3 sm:items-center">
+        <label class="sr-only" for="q">Search title or SKU</label>
+        <input id="q" type="search" placeholder="Search title or #SKU" class="bg-steel border border-edge px-3 py-2 text-sm text-paper placeholder:text-mute w-full sm:w-56 focus:outline-none focus:border-volt" />
+        <div id="filters" class="flex flex-wrap gap-2 text-[11px] uppercase tracking-wider">
+          <button type="button" data-filter="all" class="filter-btn active border border-edge px-3 py-1.5">All</button>
+          <button type="button" data-filter="towers" class="filter-btn border border-edge px-3 py-1.5">Towers</button>
+          <button type="button" data-filter="laptops" class="filter-btn border border-edge px-3 py-1.5">Laptops</button>
+          <button type="button" data-filter="parts" class="filter-btn border border-edge px-3 py-1.5">Parts</button>
+          <button type="button" data-filter="screens" class="filter-btn border border-edge px-3 py-1.5">Screens</button>
+        </div>
       </div>
     </div>
-    <div id="grid" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <article class="ticket ticket-card border border-edge rounded-sm overflow-hidden bg-ticket" data-cat="towers" data-state="open">
+    <div id="grid" class="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
+      <article class="ticket ticket-card border border-edge rounded-sm overflow-hidden bg-ticket" data-cat="towers" data-state="open" data-sku="#T-1842" data-title="office tower i7">
+        <div class="rail"></div>
+        <div class="flex items-center gap-1 px-3 py-1.5 border-b border-dashed border-edge"><span class="punch"></span><span class="punch"></span><span class="ml-auto text-[10px] uppercase tracking-widest text-mute">shop ticket</span></div>
         <div class="photo-slot relative h-36 flex items-end p-3"><span class="text-[10px] uppercase tracking-widest text-mute">Photo slot · tower</span><span class="sticker absolute top-3 right-3 bg-amber text-pit text-xs font-semibold px-2 py-1">$220</span></div>
-        <div class="p-4">
-          <div class="flex items-center justify-between text-[10px] uppercase tracking-widest text-mute"><span>#T-1842</span><span class="text-volt">Open</span></div>
-          <h3 class="font-display font-bold text-lg mt-2">Office tower i7</h3>
-          <p class="text-xs text-mute mt-1">i7-8700 · 16GB · 512 SSD · Win 11</p>
-          <p class="text-[11px] text-mute mt-2">Condition: tested, light scuffs on case.</p>
-          <a href="mailto:dnccomputerz@gmail.com?subject=HOLD%20%23T-1842" class="mt-4 inline-flex text-xs uppercase tracking-wider border border-volt text-volt px-3 py-1.5 hover:bg-volt hover:text-pit">Hold</a>
-        </div>
+        <div class="p-4"><div class="flex items-center justify-between text-[10px] uppercase tracking-widest text-mute"><span>#T-1842</span><span class="text-volt">Open</span></div><h3 class="font-display font-bold text-lg mt-2">Office tower i7</h3><p class="text-xs text-mute mt-1">i7-8700 · 16GB · 512 SSD · Win 11</p><p class="text-[11px] text-mute mt-2">Condition: tested, light scuffs on case.</p><a href="mailto:dnccomputerz@gmail.com?subject=HOLD%20%23T-1842" class="mt-4 inline-flex text-xs uppercase tracking-wider border border-volt text-volt px-3 py-1.5 hover:bg-volt hover:text-pit">Hold</a></div>
       </article>
-      <article class="ticket ticket-card border border-edge rounded-sm overflow-hidden bg-ticket" data-cat="laptops" data-state="hot">
+      <article class="ticket ticket-card border border-edge rounded-sm overflow-hidden bg-ticket" data-cat="laptops" data-state="hot" data-sku="#L-0911" data-title="thinkpad t480">
+        <div class="rail"></div>
+        <div class="flex items-center gap-1 px-3 py-1.5 border-b border-dashed border-edge"><span class="punch"></span><span class="punch"></span><span class="ml-auto text-[10px] uppercase tracking-widest text-mute">shop ticket</span></div>
         <div class="photo-slot relative h-36 flex items-end p-3"><span class="text-[10px] uppercase tracking-widest text-mute">Photo slot · laptop</span><span class="sticker absolute top-3 right-3 bg-amber text-pit text-xs font-semibold px-2 py-1">$185</span><span class="absolute top-3 left-3 bg-hot text-paper text-[10px] uppercase tracking-widest px-2 py-1">Hot</span></div>
-        <div class="p-4">
-          <div class="flex items-center justify-between text-[10px] uppercase tracking-widest text-mute"><span>#L-0911</span><span class="text-hot">Hot</span></div>
-          <h3 class="font-display font-bold text-lg mt-2">ThinkPad T480</h3>
-          <p class="text-xs text-mute mt-1">i5-8350U · 16GB · 256 SSD · 14in</p>
-          <p class="text-[11px] text-mute mt-2">Condition: battery 78%, keys clean.</p>
-          <a href="mailto:dnccomputerz@gmail.com?subject=HOLD%20%23L-0911" class="mt-4 inline-flex text-xs uppercase tracking-wider border border-volt text-volt px-3 py-1.5 hover:bg-volt hover:text-pit">Hold</a>
-        </div>
+        <div class="p-4"><div class="flex items-center justify-between text-[10px] uppercase tracking-widest text-mute"><span>#L-0911</span><span class="text-hot">Hot</span></div><h3 class="font-display font-bold text-lg mt-2">ThinkPad T480</h3><p class="text-xs text-mute mt-1">i5-8350U · 16GB · 256 SSD · 14in</p><p class="text-[11px] text-mute mt-2">Condition: battery 78%, keys clean.</p><a href="mailto:dnccomputerz@gmail.com?subject=HOLD%20%23L-0911" class="mt-4 inline-flex text-xs uppercase tracking-wider border border-volt text-volt px-3 py-1.5 hover:bg-volt hover:text-pit">Hold</a></div>
       </article>
-      <article class="ticket ticket-card border border-edge rounded-sm overflow-hidden bg-ticket" data-cat="parts" data-state="open">
+      <article class="ticket ticket-card border border-edge rounded-sm overflow-hidden bg-ticket" data-cat="parts" data-state="open" data-sku="#P-3304" data-title="rx 580 8gb">
+        <div class="rail"></div>
+        <div class="flex items-center gap-1 px-3 py-1.5 border-b border-dashed border-edge"><span class="punch"></span><span class="punch"></span><span class="ml-auto text-[10px] uppercase tracking-widest text-mute">shop ticket</span></div>
         <div class="photo-slot relative h-36 flex items-end p-3"><span class="text-[10px] uppercase tracking-widest text-mute">Photo slot · part</span><span class="sticker absolute top-3 right-3 bg-amber text-pit text-xs font-semibold px-2 py-1">$75</span></div>
-        <div class="p-4">
-          <div class="flex items-center justify-between text-[10px] uppercase tracking-widest text-mute"><span>#P-3304</span><span class="text-volt">Open</span></div>
-          <h3 class="font-display font-bold text-lg mt-2">RX 580 8GB</h3>
-          <p class="text-xs text-mute mt-1">Sapphire Nitro · dual fan · tested</p>
-          <p class="text-[11px] text-mute mt-2">Condition: thermal paste fresh.</p>
-          <a href="mailto:dnccomputerz@gmail.com?subject=HOLD%20%23P-3304" class="mt-4 inline-flex text-xs uppercase tracking-wider border border-volt text-volt px-3 py-1.5 hover:bg-volt hover:text-pit">Hold</a>
-        </div>
+        <div class="p-4"><div class="flex items-center justify-between text-[10px] uppercase tracking-widest text-mute"><span>#P-3304</span><span class="text-volt">Open</span></div><h3 class="font-display font-bold text-lg mt-2">RX 580 8GB</h3><p class="text-xs text-mute mt-1">Sapphire Nitro · dual fan · tested</p><p class="text-[11px] text-mute mt-2">Condition: thermal paste fresh.</p><a href="mailto:dnccomputerz@gmail.com?subject=HOLD%20%23P-3304" class="mt-4 inline-flex text-xs uppercase tracking-wider border border-volt text-volt px-3 py-1.5 hover:bg-volt hover:text-pit">Hold</a></div>
       </article>
-      <article class="ticket ticket-card border border-edge rounded-sm overflow-hidden bg-ticket" data-cat="screens" data-state="open">
+      <article class="ticket ticket-card border border-edge rounded-sm overflow-hidden bg-ticket" data-cat="screens" data-state="open" data-sku="#S-2208" data-title="24in 1080p panel">
+        <div class="rail"></div>
+        <div class="flex items-center gap-1 px-3 py-1.5 border-b border-dashed border-edge"><span class="punch"></span><span class="punch"></span><span class="ml-auto text-[10px] uppercase tracking-widest text-mute">shop ticket</span></div>
         <div class="photo-slot relative h-36 flex items-end p-3"><span class="text-[10px] uppercase tracking-widest text-mute">Photo slot · screen</span><span class="sticker absolute top-3 right-3 bg-amber text-pit text-xs font-semibold px-2 py-1">$55</span></div>
-        <div class="p-4">
-          <div class="flex items-center justify-between text-[10px] uppercase tracking-widest text-mute"><span>#S-2208</span><span class="text-volt">Open</span></div>
-          <h3 class="font-display font-bold text-lg mt-2">24in 1080p panel</h3>
-          <p class="text-xs text-mute mt-1">HDMI + VGA · stand included</p>
-          <p class="text-[11px] text-mute mt-2">Condition: no dead pixels on test.</p>
-          <a href="mailto:dnccomputerz@gmail.com?subject=HOLD%20%23S-2208" class="mt-4 inline-flex text-xs uppercase tracking-wider border border-volt text-volt px-3 py-1.5 hover:bg-volt hover:text-pit">Hold</a>
-        </div>
+        <div class="p-4"><div class="flex items-center justify-between text-[10px] uppercase tracking-widest text-mute"><span>#S-2208</span><span class="text-volt">Open</span></div><h3 class="font-display font-bold text-lg mt-2">24in 1080p panel</h3><p class="text-xs text-mute mt-1">HDMI + VGA · stand included</p><p class="text-[11px] text-mute mt-2">Condition: no dead pixels on test.</p><a href="mailto:dnccomputerz@gmail.com?subject=HOLD%20%23S-2208" class="mt-4 inline-flex text-xs uppercase tracking-wider border border-volt text-volt px-3 py-1.5 hover:bg-volt hover:text-pit">Hold</a></div>
       </article>
-      <article class="ticket ticket-card border border-edge rounded-sm overflow-hidden bg-ticket" data-cat="towers" data-state="sold">
+      <article class="ticket ticket-card border border-edge rounded-sm overflow-hidden bg-ticket" data-cat="towers" data-state="sold" data-sku="#T-0770" data-title="quiet office sff">
+        <div class="rail"></div>
+        <div class="flex items-center gap-1 px-3 py-1.5 border-b border-dashed border-edge"><span class="punch"></span><span class="punch"></span><span class="ml-auto text-[10px] uppercase tracking-widest text-mute">shop ticket</span></div>
         <div class="photo-slot relative h-36 flex items-end p-3"><span class="text-[10px] uppercase tracking-widest text-mute">Photo slot · tower</span><span class="sticker absolute top-3 right-3 bg-hot text-paper text-xs font-semibold px-2 py-1">SOLD</span></div>
-        <div class="p-4">
-          <div class="flex items-center justify-between text-[10px] uppercase tracking-widest text-mute"><span>#T-0770</span><span class="text-hot">Sold</span></div>
-          <h3 class="font-display font-bold text-lg mt-2">Quiet office SFF</h3>
-          <p class="text-xs text-mute mt-1">i5-8500T · 16GB · 256 SSD</p>
-          <p class="text-[11px] text-mute mt-2">Condition: was clean. Gone.</p>
-        </div>
+        <div class="p-4"><div class="flex items-center justify-between text-[10px] uppercase tracking-widest text-mute"><span>#T-0770</span><span class="text-hot">Sold</span></div><h3 class="font-display font-bold text-lg mt-2">Quiet office SFF</h3><p class="text-xs text-mute mt-1">i5-8500T · 16GB · 256 SSD</p><p class="text-[11px] text-mute mt-2">Condition: was clean. Gone.</p></div>
       </article>
-      <article class="ticket ticket-card border border-edge rounded-sm overflow-hidden bg-ticket" data-cat="laptops" data-state="open">
+      <article class="ticket ticket-card border border-edge rounded-sm overflow-hidden bg-ticket" data-cat="laptops" data-state="open" data-sku="#L-4412" data-title="15in i5 daily">
+        <div class="rail"></div>
+        <div class="flex items-center gap-1 px-3 py-1.5 border-b border-dashed border-edge"><span class="punch"></span><span class="punch"></span><span class="ml-auto text-[10px] uppercase tracking-widest text-mute">shop ticket</span></div>
         <div class="photo-slot relative h-36 flex items-end p-3"><span class="text-[10px] uppercase tracking-widest text-mute">Photo slot · laptop</span><span class="sticker absolute top-3 right-3 bg-amber text-pit text-xs font-semibold px-2 py-1">$140</span></div>
-        <div class="p-4">
-          <div class="flex items-center justify-between text-[10px] uppercase tracking-widest text-mute"><span>#L-4412</span><span class="text-volt">Open</span></div>
-          <h3 class="font-display font-bold text-lg mt-2">15in i5 daily</h3>
-          <p class="text-xs text-mute mt-1">i5-10210U · 8GB · 256 SSD</p>
-          <p class="text-[11px] text-mute mt-2">Condition: charger included, hinge tight.</p>
-          <a href="mailto:dnccomputerz@gmail.com?subject=HOLD%20%23L-4412" class="mt-4 inline-flex text-xs uppercase tracking-wider border border-volt text-volt px-3 py-1.5 hover:bg-volt hover:text-pit">Hold</a>
-        </div>
+        <div class="p-4"><div class="flex items-center justify-between text-[10px] uppercase tracking-widest text-mute"><span>#L-4412</span><span class="text-volt">Open</span></div><h3 class="font-display font-bold text-lg mt-2">15in i5 daily</h3><p class="text-xs text-mute mt-1">i5-10210U · 8GB · 256 SSD</p><p class="text-[11px] text-mute mt-2">Condition: charger included, hinge tight.</p><a href="mailto:dnccomputerz@gmail.com?subject=HOLD%20%23L-4412" class="mt-4 inline-flex text-xs uppercase tracking-wider border border-volt text-volt px-3 py-1.5 hover:bg-volt hover:text-pit">Hold</a></div>
       </article>
-      <article class="ticket ticket-card border border-edge rounded-sm overflow-hidden bg-ticket" data-cat="parts" data-state="hot">
+      <article class="ticket ticket-card border border-edge rounded-sm overflow-hidden bg-ticket" data-cat="parts" data-state="hot" data-sku="#P-1180" data-title="16gb ddr4 kit">
+        <div class="rail"></div>
+        <div class="flex items-center gap-1 px-3 py-1.5 border-b border-dashed border-edge"><span class="punch"></span><span class="punch"></span><span class="ml-auto text-[10px] uppercase tracking-widest text-mute">shop ticket</span></div>
         <div class="photo-slot relative h-36 flex items-end p-3"><span class="text-[10px] uppercase tracking-widest text-mute">Photo slot · part</span><span class="sticker absolute top-3 right-3 bg-amber text-pit text-xs font-semibold px-2 py-1">$35</span><span class="absolute top-3 left-3 bg-hot text-paper text-[10px] uppercase tracking-widest px-2 py-1">Hot</span></div>
-        <div class="p-4">
-          <div class="flex items-center justify-between text-[10px] uppercase tracking-widest text-mute"><span>#P-1180</span><span class="text-hot">Hot</span></div>
-          <h3 class="font-display font-bold text-lg mt-2">16GB DDR4 kit</h3>
-          <p class="text-xs text-mute mt-1">2x8 · 3200 · desktop DIMM</p>
-          <p class="text-[11px] text-mute mt-2">Condition: pulled, passed memtest.</p>
-          <a href="mailto:dnccomputerz@gmail.com?subject=HOLD%20%23P-1180" class="mt-4 inline-flex text-xs uppercase tracking-wider border border-volt text-volt px-3 py-1.5 hover:bg-volt hover:text-pit">Hold</a>
-        </div>
+        <div class="p-4"><div class="flex items-center justify-between text-[10px] uppercase tracking-widest text-mute"><span>#P-1180</span><span class="text-hot">Hot</span></div><h3 class="font-display font-bold text-lg mt-2">16GB DDR4 kit</h3><p class="text-xs text-mute mt-1">2x8 · 3200 · desktop DIMM</p><p class="text-[11px] text-mute mt-2">Condition: pulled, passed memtest.</p><a href="mailto:dnccomputerz@gmail.com?subject=HOLD%20%23P-1180" class="mt-4 inline-flex text-xs uppercase tracking-wider border border-volt text-volt px-3 py-1.5 hover:bg-volt hover:text-pit">Hold</a></div>
       </article>
-      <article class="ticket ticket-card border border-edge rounded-sm overflow-hidden bg-ticket" data-cat="screens" data-state="open">
+      <article class="ticket ticket-card border border-edge rounded-sm overflow-hidden bg-ticket" data-cat="screens" data-state="open" data-sku="#S-0094" data-title="27in 1440p">
+        <div class="rail"></div>
+        <div class="flex items-center gap-1 px-3 py-1.5 border-b border-dashed border-edge"><span class="punch"></span><span class="punch"></span><span class="ml-auto text-[10px] uppercase tracking-widest text-mute">shop ticket</span></div>
         <div class="photo-slot relative h-36 flex items-end p-3"><span class="text-[10px] uppercase tracking-widest text-mute">Photo slot · screen</span><span class="sticker absolute top-3 right-3 bg-amber text-pit text-xs font-semibold px-2 py-1">$120</span></div>
-        <div class="p-4">
-          <div class="flex items-center justify-between text-[10px] uppercase tracking-widest text-mute"><span>#S-0094</span><span class="text-volt">Open</span></div>
-          <h3 class="font-display font-bold text-lg mt-2">27in 1440p</h3>
-          <p class="text-xs text-mute mt-1">IPS · HDMI + DP · 75Hz</p>
-          <p class="text-[11px] text-mute mt-2">Condition: stand scuffed, panel clean.</p>
-          <a href="mailto:dnccomputerz@gmail.com?subject=HOLD%20%23S-0094" class="mt-4 inline-flex text-xs uppercase tracking-wider border border-volt text-volt px-3 py-1.5 hover:bg-volt hover:text-pit">Hold</a>
-        </div>
+        <div class="p-4"><div class="flex items-center justify-between text-[10px] uppercase tracking-widest text-mute"><span>#S-0094</span><span class="text-volt">Open</span></div><h3 class="font-display font-bold text-lg mt-2">27in 1440p</h3><p class="text-xs text-mute mt-1">IPS · HDMI + DP · 75Hz</p><p class="text-[11px] text-mute mt-2">Condition: stand scuffed, panel clean.</p><a href="mailto:dnccomputerz@gmail.com?subject=HOLD%20%23S-0094" class="mt-4 inline-flex text-xs uppercase tracking-wider border border-volt text-volt px-3 py-1.5 hover:bg-volt hover:text-pit">Hold</a></div>
+      </article>
+      <article class="ticket ticket-card border border-edge rounded-sm overflow-hidden bg-ticket" data-cat="towers" data-state="open" data-sku="#T-5521" data-title="ryzen work tower">
+        <div class="rail"></div>
+        <div class="flex items-center gap-1 px-3 py-1.5 border-b border-dashed border-edge"><span class="punch"></span><span class="punch"></span><span class="ml-auto text-[10px] uppercase tracking-widest text-mute">shop ticket</span></div>
+        <div class="photo-slot relative h-36 flex items-end p-3"><span class="text-[10px] uppercase tracking-widest text-mute">Photo slot · tower</span><span class="sticker absolute top-3 right-3 bg-amber text-pit text-xs font-semibold px-2 py-1">$310</span></div>
+        <div class="p-4"><div class="flex items-center justify-between text-[10px] uppercase tracking-widest text-mute"><span>#T-5521</span><span class="text-volt">Open</span></div><h3 class="font-display font-bold text-lg mt-2">Ryzen work tower</h3><p class="text-xs text-mute mt-1">R5 3600 · 32GB · 1TB NVMe</p><p class="text-[11px] text-mute mt-2">Condition: clean build, extra fan.</p><a href="mailto:dnccomputerz@gmail.com?subject=HOLD%20%23T-5521" class="mt-4 inline-flex text-xs uppercase tracking-wider border border-volt text-volt px-3 py-1.5 hover:bg-volt hover:text-pit">Hold</a></div>
+      </article>
+      <article class="ticket ticket-card border border-edge rounded-sm overflow-hidden bg-ticket" data-cat="parts" data-state="open" data-sku="#P-9012" data-title="1tb nvme">
+        <div class="rail"></div>
+        <div class="flex items-center gap-1 px-3 py-1.5 border-b border-dashed border-edge"><span class="punch"></span><span class="punch"></span><span class="ml-auto text-[10px] uppercase tracking-widest text-mute">shop ticket</span></div>
+        <div class="photo-slot relative h-36 flex items-end p-3"><span class="text-[10px] uppercase tracking-widest text-mute">Photo slot · part</span><span class="sticker absolute top-3 right-3 bg-amber text-pit text-xs font-semibold px-2 py-1">$45</span></div>
+        <div class="p-4"><div class="flex items-center justify-between text-[10px] uppercase tracking-widest text-mute"><span>#P-9012</span><span class="text-volt">Open</span></div><h3 class="font-display font-bold text-lg mt-2">1TB NVMe</h3><p class="text-xs text-mute mt-1">PCIe 3.0 · pulled · SMART ok</p><p class="text-[11px] text-mute mt-2">Condition: 12% worn, ready to drop in.</p><a href="mailto:dnccomputerz@gmail.com?subject=HOLD%20%23P-9012" class="mt-4 inline-flex text-xs uppercase tracking-wider border border-volt text-volt px-3 py-1.5 hover:bg-volt hover:text-pit">Hold</a></div>
       </article>
     </div>
-    <p id="empty" class="hidden text-mute text-sm mt-8">Nothing in that bin right now. Try All.</p>
+    <p id="empty" class="hidden text-mute text-sm mt-8">Nothing in that bin right now. Try All or clear the search.</p>
   </section>
-  <section id="how" class="fade-ready relative z-10 px-4 md:px-8 py-16 border-t border-edge">
+  <section id="how" class="relative z-10 px-4 md:px-8 py-16 border-t border-edge fade-in">
     <p class="text-[11px] uppercase tracking-widest text-mute mb-2">Process</p>
     <h2 class="font-display font-extrabold text-3xl md:text-4xl tracking-tight">How a sale works</h2>
     <ol class="mt-10 grid md:grid-cols-3 gap-8">
-      <li><p class="font-display font-extrabold text-4xl text-volt leading-none">1</p><h3 class="font-display font-bold text-xl mt-3">Pick a ticket</h3><p class="mt-2 text-mute text-sm leading-relaxed">Filter the lot. Read the spec and condition. Price is the sticker.</p></li>
+      <li><p class="font-display font-extrabold text-4xl text-volt leading-none">1</p><h3 class="font-display font-bold text-xl mt-3">Pick a ticket</h3><p class="mt-2 text-mute text-sm leading-relaxed">Filter the lot or search a title / #SKU. Read the spec and condition. Price is the sticker.</p></li>
       <li><p class="font-display font-extrabold text-4xl text-volt leading-none">2</p><h3 class="font-display font-bold text-xl mt-3">Hit Hold</h3><p class="mt-2 text-mute text-sm leading-relaxed">Hold opens mail to dnccomputerz@gmail.com with the SKU in the subject. Dee replies if it is still on the bench.</p></li>
       <li><p class="font-display font-extrabold text-4xl text-volt leading-none">3</p><h3 class="font-display font-bold text-xl mt-3">Pay + pick up</h3><p class="mt-2 text-mute text-sm leading-relaxed">Cash or the method Dee names in the reply. Pickup after confirm. Shipping is Phase 2.</p></li>
     </ol>
   </section>
-  <section id="pickup" class="fade-ready relative z-10 px-4 md:px-8 py-16 border-t border-edge">
+  <section id="pickup" class="relative z-10 px-4 md:px-8 py-16 border-t border-edge fade-in">
     <p class="text-[11px] uppercase tracking-widest text-mute mb-2">Rules</p>
     <h2 class="font-display font-extrabold text-3xl md:text-4xl tracking-tight">Pickup</h2>
     <div class="mt-8 grid md:grid-cols-2 gap-4">
@@ -212,47 +227,60 @@
       <article class="border border-edge bg-ticket p-6"><h3 class="font-display font-bold text-lg">Holds + sold</h3><p class="mt-2 text-mute text-sm leading-relaxed">A Hold is a conversation, not a cart. If the ticket says SOLD, it is gone. Dee flips that sticker in the HTML for v1.</p></article>
     </div>
   </section>
-  <section id="ask" class="fade-ready relative z-10 px-4 md:px-8 py-16 md:py-20 border-t border-edge">
+  <section id="ask" class="relative z-10 px-4 md:px-8 py-16 md:py-20 border-t border-edge fade-in">
     <p class="text-[11px] uppercase tracking-widest text-mute mb-2">Contact</p>
     <h2 class="font-display font-extrabold text-3xl md:text-5xl tracking-tight">Ask Dee</h2>
     <p class="mt-4 max-w-xl text-mute leading-relaxed">Questions, a hold, a photo request, or is this still there. One mailbox. Include the SKU if you have it.</p>
     <a href="mailto:dnccomputerz@gmail.com?subject=DNC%20COMPUTERZ%20ask" class="mt-8 inline-flex items-center gap-2 bg-volt text-pit px-6 py-3 font-display font-bold hover:bg-paper">dnccomputerz@gmail.com</a>
   </section>
-  <footer class="relative z-10 px-4 md:px-8 py-8 border-t border-edge text-[11px] uppercase tracking-widest text-mute flex flex-wrap items-center justify-between gap-3">
-    <span>DNC COMPUTERZ · lot page · no cart</span>
-    <span>Contact · dnccomputerz@gmail.com</span>
+  <footer class="relative z-10 px-4 md:px-8 py-8 border-t border-edge text-[11px] uppercase tracking-widest text-mute flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+    <span>DNC COMPUTERZ · local lot</span>
+    <span>No cart · Hold by mail · Pickup after confirm</span>
   </footer>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
   <script>
     (function () {
-      if (window.anime) {
+      var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (!reduce && window.anime) {
         anime({
-          targets: ".fade-ready",
+          targets: ".fade-in",
           opacity: [0, 1],
           translateY: [10, 0],
           easing: "easeOutQuad",
           duration: 500,
-          delay: anime.stagger(70)
+          delay: anime.stagger(60)
         });
       } else {
-        document.querySelectorAll(".fade-ready").forEach(function (el) { el.style.opacity = 1; });
+        document.querySelectorAll(".fade-in").forEach(function (el) { el.style.opacity = "1"; });
       }
-      var buttons = document.querySelectorAll(".filter-btn");
-      var cards = document.querySelectorAll(".ticket-card");
+      var filter = "all";
+      var q = "";
+      var cards = Array.prototype.slice.call(document.querySelectorAll(".ticket-card"));
       var empty = document.getElementById("empty");
-      buttons.forEach(function (btn) {
-        btn.addEventListener("click", function () {
-          buttons.forEach(function (b) { b.classList.remove("active"); });
-          btn.classList.add("active");
-          var key = btn.getAttribute("data-filter");
-          var shown = 0;
-          cards.forEach(function (card) {
-            var match = key === "all" || card.getAttribute("data-cat") === key;
-            card.classList.toggle("hidden-card", !match);
-            if (match) shown += 1;
-          });
-          empty.classList.toggle("hidden", shown > 0);
+      var input = document.getElementById("q");
+      function apply() {
+        var shown = 0;
+        cards.forEach(function (card) {
+          var catOk = filter === "all" || card.getAttribute("data-cat") === filter;
+          var hay = ((card.getAttribute("data-title") || "") + " " + (card.getAttribute("data-sku") || "") + " " + card.textContent).toLowerCase();
+          var qOk = !q || hay.indexOf(q) !== -1;
+          var on = catOk && qOk;
+          card.classList.toggle("hidden-card", !on);
+          if (on) shown += 1;
         });
+        empty.classList.toggle("hidden", shown !== 0);
+      }
+      document.querySelectorAll(".filter-btn").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          filter = btn.getAttribute("data-filter");
+          document.querySelectorAll(".filter-btn").forEach(function (b) { b.classList.remove("active"); });
+          btn.classList.add("active");
+          apply();
+        });
+      });
+      input.addEventListener("input", function () {
+        q = (input.value || "").trim().toLowerCase();
+        apply();
       });
     })();
   </script>
