@@ -78,6 +78,11 @@
     }
     .crawl { animation: crawl 34s linear infinite; }
     .wo { letter-spacing: .14em; }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .crawl { animation: none; }
+      .js-fade, .js-card { opacity: 1 !important; transform: none !important; }
+    }
   </style>
 </head>
 <body class="font-mono antialiased overflow-x-hidden">
@@ -135,7 +140,7 @@
           <input id="q" type="search" placeholder="Search title or #014" class="w-full bg-steel border border-rail px-3 py-2.5 text-sm text-paper placeholder:text-mute/70 outline-none focus:border-volt" />
         </label>
       </div>
-      <div id="chips" class="flex flex-wrap gap-2 mb-8">
+      <div id="chips" class="flex flex-wrap gap-2 mb-8" role="tablist" aria-label="Filter the lot">
         <button type="button" class="chip is-on text-[11px] uppercase tracking-widest border border-rail px-3 py-1.5" data-filter="all">All</button>
         <button type="button" class="chip text-[11px] uppercase tracking-widest border border-rail px-3 py-1.5 text-mute hover:text-paper" data-filter="towers">Towers</button>
         <button type="button" class="chip text-[11px] uppercase tracking-widest border border-rail px-3 py-1.5 text-mute hover:text-paper" data-filter="laptops">Laptops</button>
@@ -253,7 +258,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
   <script>
     (function () {
-      if (window.anime) {
+      var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (window.anime && !reduce) {
         anime({ targets: ".js-fade", opacity: [0, 1], translateY: [12, 0], delay: anime.stagger(70), duration: 480, easing: "easeOutQuad" });
         anime({ targets: ".js-card", opacity: [0, 1], translateY: [16, 0], delay: anime.stagger(40, { start: 180 }), duration: 420, easing: "easeOutQuad" });
       }
