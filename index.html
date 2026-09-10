@@ -52,6 +52,7 @@
         repeating-linear-gradient(90deg, transparent 0 11px, rgba(77,139,255,.08) 11px 12px),
         repeating-linear-gradient(0deg, transparent 0 11px, rgba(77,139,255,.08) 11px 12px);
     }
+    .fade-ready { opacity: 0; }
   </style>
 </head>
 <body class="font-mono antialiased overflow-x-hidden">
@@ -88,7 +89,7 @@
       <span class="px-6">#S-0094 OPEN</span>
     </div>
   </div>
-  <section id="top" class="relative z-10 px-4 md:px-8 pt-14 md:pt-20 pb-12 max-w-5xl">
+  <section id="top" class="fade-ready relative z-10 px-4 md:px-8 pt-14 md:pt-20 pb-12 max-w-5xl">
     <p class="text-volt text-[11px] uppercase tracking-[0.22em] mb-4">Mailbox · DNC Computerz · local lot</p>
     <h1 class="font-display font-extrabold leading-[0.92] text-5xl md:text-7xl tracking-tight">On the bench.<br />Priced. Ready.</h1>
     <p class="mt-6 max-w-xl text-mute leading-relaxed">Towers, laptops, parts, and screens. Each ticket has a SKU, a sticker price, and a Hold button that emails Dee. No cart. No checkout. You hold it, Dee confirms, you pick it up.</p>
@@ -97,7 +98,7 @@
       <a href="mailto:dnccomputerz@gmail.com?subject=DNC%20COMPUTERZ%20ask" class="inline-flex items-center gap-2 border border-edge px-5 py-3 font-display font-bold text-sm hover:border-volt hover:text-volt">Ask Dee</a>
     </div>
   </section>
-  <section id="lot" class="relative z-10 px-4 md:px-8 pb-16">
+  <section id="lot" class="fade-ready relative z-10 px-4 md:px-8 pb-16">
     <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-6">
       <div>
         <p class="text-[11px] uppercase tracking-widest text-mute">Current lot · placeholder SKUs</p>
@@ -194,7 +195,7 @@
     </div>
     <p id="empty" class="hidden text-mute text-sm mt-8">Nothing in that bin right now. Try All.</p>
   </section>
-  <section id="how" class="relative z-10 px-4 md:px-8 py-16 border-t border-edge">
+  <section id="how" class="fade-ready relative z-10 px-4 md:px-8 py-16 border-t border-edge">
     <p class="text-[11px] uppercase tracking-widest text-mute mb-2">Process</p>
     <h2 class="font-display font-extrabold text-3xl md:text-4xl tracking-tight">How a sale works</h2>
     <ol class="mt-10 grid md:grid-cols-3 gap-8">
@@ -203,7 +204,7 @@
       <li><p class="font-display font-extrabold text-4xl text-volt leading-none">3</p><h3 class="font-display font-bold text-xl mt-3">Pay + pick up</h3><p class="mt-2 text-mute text-sm leading-relaxed">Cash or the method Dee names in the reply. Pickup after confirm. Shipping is Phase 2.</p></li>
     </ol>
   </section>
-  <section id="pickup" class="relative z-10 px-4 md:px-8 py-16 border-t border-edge">
+  <section id="pickup" class="fade-ready relative z-10 px-4 md:px-8 py-16 border-t border-edge">
     <p class="text-[11px] uppercase tracking-widest text-mute mb-2">Rules</p>
     <h2 class="font-display font-extrabold text-3xl md:text-4xl tracking-tight">Pickup</h2>
     <div class="mt-8 grid md:grid-cols-2 gap-4">
@@ -211,21 +212,30 @@
       <article class="border border-edge bg-ticket p-6"><h3 class="font-display font-bold text-lg">Holds + sold</h3><p class="mt-2 text-mute text-sm leading-relaxed">A Hold is a conversation, not a cart. If the ticket says SOLD, it is gone. Dee flips that sticker in the HTML for v1.</p></article>
     </div>
   </section>
-  <section id="ask" class="relative z-10 px-4 md:px-8 py-16 md:py-20 border-t border-edge">
+  <section id="ask" class="fade-ready relative z-10 px-4 md:px-8 py-16 md:py-20 border-t border-edge">
     <p class="text-[11px] uppercase tracking-widest text-mute mb-2">Contact</p>
     <h2 class="font-display font-extrabold text-3xl md:text-5xl tracking-tight">Ask Dee</h2>
     <p class="mt-4 max-w-xl text-mute leading-relaxed">Questions, a hold, a photo request, or is this still there. One mailbox. Include the SKU if you have it.</p>
     <a href="mailto:dnccomputerz@gmail.com?subject=DNC%20COMPUTERZ%20ask" class="mt-8 inline-flex items-center gap-2 bg-volt text-pit px-6 py-3 font-display font-bold hover:bg-paper">dnccomputerz@gmail.com</a>
   </section>
-  <footer class="relative z-10 px-4 md:px-8 py-8 border-t border-edge flex flex-col md:flex-row md:items-center md:justify-between gap-3 text-[11px] uppercase tracking-wider text-mute">
-    <p class="font-display font-bold text-paper normal-case tracking-tight">DNC COMPUTERZ — Dee’s lot</p>
-    <p>Single file · Tailwind CDN · anime.js 3.2.2 · no cart</p>
+  <footer class="relative z-10 px-4 md:px-8 py-8 border-t border-edge text-[11px] uppercase tracking-widest text-mute flex flex-wrap items-center justify-between gap-3">
+    <span>DNC COMPUTERZ · lot page · no cart</span>
+    <span>Contact · dnccomputerz@gmail.com</span>
   </footer>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    (function () {
       if (window.anime) {
-        anime({ targets: "#top, #lot, #how, #pickup, #ask, .ticket-card", opacity: [0, 1], translateY: [10, 0], duration: 480, delay: anime.stagger(40), easing: "easeOutQuad" });
+        anime({
+          targets: ".fade-ready",
+          opacity: [0, 1],
+          translateY: [10, 0],
+          easing: "easeOutQuad",
+          duration: 500,
+          delay: anime.stagger(70)
+        });
+      } else {
+        document.querySelectorAll(".fade-ready").forEach(function (el) { el.style.opacity = 1; });
       }
       var buttons = document.querySelectorAll(".filter-btn");
       var cards = document.querySelectorAll(".ticket-card");
@@ -234,17 +244,17 @@
         btn.addEventListener("click", function () {
           buttons.forEach(function (b) { b.classList.remove("active"); });
           btn.classList.add("active");
-          var f = btn.getAttribute("data-filter");
+          var key = btn.getAttribute("data-filter");
           var shown = 0;
           cards.forEach(function (card) {
-            var match = f === "all" || card.getAttribute("data-cat") === f;
+            var match = key === "all" || card.getAttribute("data-cat") === key;
             card.classList.toggle("hidden-card", !match);
-            if (match) shown++;
+            if (match) shown += 1;
           });
           empty.classList.toggle("hidden", shown > 0);
         });
       });
-    });
+    })();
   </script>
 </body>
 </html>
