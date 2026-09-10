@@ -1,364 +1,118 @@
-<!--
-  DNC COMPUTERZ — client-owned single file.
-  Drop this as index.html at the root of a new Vercel project. No build step.
-
-  Clone a ticket:
-    1. Copy one <article class="item ticket ...">
-    2. Change data-cat (towers|laptops|parts|screens), data-sku, data-title, data-status (open|hot|sold)
-    3. Change the #SKU label, price sticker, title, spec line, condition line
-    4. For SOLD: sticker text "SOLD", add class opacity-70 on the article, replace Hold link with an em dash
-    5. Hold mailto subject should stay HOLD%20%23SKU so Dee can sort mail
-
-  Contact on the live page: dnccomputerz@gmail.com
--->
+<!-- DNC COMPUTERZ — Dee’s lot. Single file. Drop on Vercel as index.html. -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DNC COMPUTERZ — Dee’s lot</title>
-  <meta name="description" content="Dee’s bench. Towers, laptops, parts, and screens. Price on the sticker. Mail a hold. Pick it up." />
-  <meta name="theme-color" content="#080A0D" />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23080A0D'/%3E%3Crect x='4' y='16' width='24' height='2' fill='%234D8BFF'/%3E%3Crect x='22' y='6' width='5' height='20' fill='%23F5C542'/%3E%3C/svg%3E" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            pit: '#080A0D',
-            steel: '#12161C',
-            rail: '#1C232C',
-            mute: '#8B95A3',
-            paper: '#E8EDF4',
-            volt: '#4D8BFF',
-            tag: '#F5C542',
-            hot: '#FF2B3A'
-          },
-          fontFamily: {
-            display: ['Syne', 'system-ui', 'sans-serif'],
-            mono: ['IBM Plex Mono', 'ui-monospace', 'monospace']
-          }
-        }
-      }
-    };
-  </script>
-  <style>
-    html { scroll-behavior: smooth; }
-    body { background: #080A0D; color: #E8EDF4; }
-    .grain {
-      position: fixed; inset: 0; pointer-events: none; z-index: 40; opacity: .07;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    }
-    .scan {
-      background-image: linear-gradient(rgba(77,139,255,.04) 1px, transparent 1px);
-      background-size: 100% 28px;
-    }
-    .item.is-off { display: none; }
-    .chip.is-on { background: #4D8BFF; color: #080A0D; border-color: #4D8BFF; }
-    .sticker { transform: rotate(-2.2deg); box-shadow: 2px 3px 0 rgba(0,0,0,.55); }
-    .sticker.r { transform: rotate(2deg); }
-    .ticket { position: relative; }
-    .ticket::before, .ticket::after {
-      content: ""; position: absolute; top: 42px; width: 14px; height: 14px;
-      background: #080A0D; border: 1px solid #1C232C; border-radius: 999px;
-    }
-    .ticket::before { left: -8px; }
-    .ticket::after { right: -8px; }
-    .ticket-dash {
-      background-image: repeating-linear-gradient(90deg, #1C232C 0 8px, transparent 8px 14px);
-      background-position: bottom; background-repeat: repeat-x; background-size: auto 1px;
-    }
-    @keyframes crawl { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-    .crawl { animation: crawl 38s linear infinite; }
-    .wo { letter-spacing: .14em; }
-    @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-      .crawl { animation: none; }
-      .js-fade, .js-card { opacity: 1 !important; transform: none !important; }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DNC COMPUTERZ — Dee’s lot</title>
+<meta name="description" content="Dee’s bench. Towers, laptops, parts, and screens with the price on the sticker. Mail a hold. Pick it up." />
+<meta name="theme-color" content="#080A0D" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23080A0D'/%3E%3Crect x='4' y='16' width='24' height='2' fill='%234D8BFF'/%3E%3Crect x='22' y='6' width='5' height='20' fill='%23F5C542'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{pit:'#080A0D',steel:'#12161C',rail:'#1C232C',mute:'#8B95A3',paper:'#E8EDF4',volt:'#4D8BFF',tag:'#F5C542',hot:'#FF2B3A'},fontFamily:{display:['Syne','system-ui','sans-serif'],mono:['IBM Plex Mono','ui-monospace','monospace']}}}};</script>
+<style>
+html{scroll-behavior:smooth}body{background:#080A0D;color:#E8EDF4}
+.grain{position:fixed;inset:0;pointer-events:none;z-index:40;opacity:.07;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.scan{background-image:linear-gradient(rgba(77,139,255,.045) 1px,transparent 1px);background-size:100% 28px}
+.item.is-off{display:none}.chip.is-on{background:#4D8BFF;color:#080A0D;border-color:#4D8BFF}
+.sticker{transform:rotate(-2.2deg);box-shadow:2px 3px 0 rgba(0,0,0,.55)}
+.ticket{position:relative}.ticket::before,.ticket::after{content:"";position:absolute;top:118px;width:14px;height:14px;background:#080A0D;border:1px solid #1C232C;border-radius:999px}
+.ticket::before{left:-8px}.ticket::after{right:-8px}
+.ticket-dash{background-image:repeating-linear-gradient(90deg,#1C232C 0 8px,transparent 8px 14px);background-position:bottom;background-repeat:repeat-x;background-size:auto 1px}
+.slot{background:repeating-linear-gradient(135deg,#12161C 0 8px,#0d1116 8px 16px);border-bottom:1px dashed #1C232C}
+@keyframes crawl{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.crawl{animation:crawl 32s linear infinite}.wo{letter-spacing:.14em}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.crawl{animation:none}.js-fade,.js-card{opacity:1!important;transform:none!important}}
+</style>
 </head>
 <body class="font-mono antialiased overflow-x-hidden">
-  <div class="grain" aria-hidden="true"></div>
-
-  <header class="sticky top-0 z-30 flex items-center justify-between px-5 md:px-10 py-4 border-b border-rail bg-pit/92 backdrop-blur">
-    <a href="#top" class="font-display font-extrabold tracking-tight text-lg flex items-center gap-3">
-      DNC COMPUTERZ<span class="block w-2 h-2 bg-volt"></span>
-    </a>
-    <nav class="hidden sm:flex items-center gap-6 text-[11px] uppercase tracking-widest text-mute">
-      <a href="#lot" class="hover:text-paper transition-colors">Lot</a>
-      <a href="#how" class="hover:text-paper transition-colors">How</a>
-      <a href="#ask" class="text-paper hover:text-volt transition-colors">Ask Dee</a>
-    </nav>
-    <a href="mailto:dnccomputerz@gmail.com?subject=DNC%20COMPUTERZ%20hold" class="sm:hidden text-[11px] uppercase tracking-widest text-volt">Ask →</a>
-  </header>
-
-  <div class="overflow-hidden border-b border-rail bg-steel/60" aria-hidden="true">
-    <div class="crawl flex whitespace-nowrap text-[11px] uppercase wo text-mute py-2">
-      <span class="px-6">Lot open · cash / Cash App on pickup · no cart · no shipping on v1 · hold by mail · dummy SKUs — paste real titles</span>
-      <span class="px-6">Lot open · cash / Cash App on pickup · no cart · no shipping on v1 · hold by mail · dummy SKUs — paste real titles</span>
-      <span class="px-6">Lot open · cash / Cash App on pickup · no cart · no shipping on v1 · hold by mail · dummy SKUs — paste real titles</span>
-      <span class="px-6">Lot open · cash / Cash App on pickup · no cart · no shipping on v1 · hold by mail · dummy SKUs — paste real titles</span>
-    </div>
-  </div>
-
-  <main>
-    <section id="top" class="relative scan px-5 md:px-10 pt-16 md:pt-24 pb-16 md:pb-20">
-      <p class="js-fade text-[11px] uppercase wo text-mute mb-5">Work order · DNC · items for sale</p>
-      <h1 class="js-fade font-display font-extrabold text-5xl md:text-7xl leading-[0.92] tracking-tight max-w-4xl">
-        The bench is open.<br />Price is on the <span class="text-tag">sticker</span>.
-      </h1>
-      <p class="js-fade mt-6 max-w-xl text-mute text-sm leading-relaxed">
-        Towers, laptops, parts, and screens from Dee. Not a storefront. Read the ticket, mail a hold, pick it up when Dee names the city. Placeholder SKUs sit on the grid so the page has weight — swap titles, prices, condition, and Open / Hot / Sold.
-      </p>
-      <div class="js-fade mt-8 flex flex-wrap gap-3">
-        <a href="#lot" class="inline-flex items-center gap-2 bg-volt text-pit font-display font-bold px-5 py-3 text-sm hover:brightness-110 transition">See the lot</a>
-        <a href="mailto:dnccomputerz@gmail.com?subject=DNC%20COMPUTERZ%20what%20do%20you%20have" class="inline-flex items-center gap-2 border border-rail px-5 py-3 text-sm text-paper hover:border-volt hover:text-volt transition">Ask Dee</a>
-      </div>
-    </section>
-
-    <section id="lot" class="px-5 md:px-10 py-16">
-      <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-8">
-        <div>
-          <p class="text-[11px] uppercase wo text-mute mb-2">Current lot</p>
-          <h2 class="font-display font-extrabold text-3xl md:text-4xl tracking-tight">What’s on the bench</h2>
-        </div>
-        <label class="block w-full md:w-80">
-          <span class="sr-only">Search title or SKU</span>
-          <input id="q" type="search" placeholder="Search title or #014" class="w-full bg-steel border border-rail px-3 py-2.5 text-sm text-paper placeholder:text-mute/70 outline-none focus:border-volt" />
-        </label>
-      </div>
-
-      <div id="chips" class="flex flex-wrap gap-2 mb-8">
-        <button type="button" class="chip is-on text-[11px] uppercase tracking-widest border border-rail px-3 py-1.5" data-filter="all">All</button>
-        <button type="button" class="chip text-[11px] uppercase tracking-widest border border-rail px-3 py-1.5 text-mute" data-filter="towers">Towers</button>
-        <button type="button" class="chip text-[11px] uppercase tracking-widest border border-rail px-3 py-1.5 text-mute" data-filter="laptops">Laptops</button>
-        <button type="button" class="chip text-[11px] uppercase tracking-widest border border-rail px-3 py-1.5 text-mute" data-filter="parts">Parts</button>
-        <button type="button" class="chip text-[11px] uppercase tracking-widest border border-rail px-3 py-1.5 text-mute" data-filter="screens">Screens</button>
-      </div>
-
-      <p id="count" class="text-[11px] uppercase wo text-mute mb-5">10 tickets</p>
-
-      <div id="grid" class="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
-
-        <article class="item ticket js-card bg-steel border border-rail ticket-dash p-4 flex flex-col" data-cat="towers" data-sku="014" data-title="ryzen 5 office tower" data-status="open">
-          <div class="flex items-start justify-between gap-3 mb-4">
-            <p class="text-[10px] uppercase wo text-mute">#014 · tower</p>
-            <span class="sticker bg-tag text-pit text-[11px] font-semibold px-2 py-1">$220</span>
-          </div>
-          <h3 class="font-display font-bold text-xl">Ryzen 5 office tower</h3>
-          <p class="text-mute text-xs mt-2">16GB / 512GB SSD. Boots clean. Quiet case.</p>
-          <p class="text-[11px] text-mute mt-3">Used · tested · city TBA on hold</p>
-          <div class="mt-auto pt-5 flex items-center justify-between">
-            <span class="text-[10px] uppercase wo text-volt">Open</span>
-            <a class="text-[11px] uppercase tracking-widest hover:text-volt" href="mailto:dnccomputerz@gmail.com?subject=HOLD%20%23014%20Ryzen%205%20office%20tower">Hold →</a>
-          </div>
-        </article>
-
-        <article class="item ticket js-card bg-steel border border-rail ticket-dash p-4 flex flex-col" data-cat="laptops" data-sku="021" data-title="thinkpad t14 gen 2" data-status="hot">
-          <div class="flex items-start justify-between gap-3 mb-4">
-            <p class="text-[10px] uppercase wo text-mute">#021 · laptop</p>
-            <span class="sticker r bg-tag text-pit text-[11px] font-semibold px-2 py-1">$310</span>
-          </div>
-          <h3 class="font-display font-bold text-xl">ThinkPad T14 Gen 2</h3>
-          <p class="text-mute text-xs mt-2">i5 / 16GB / 256GB. Battery holds a workday.</p>
-          <p class="text-[11px] text-mute mt-3">Used · light marks · city TBA on hold</p>
-          <div class="mt-auto pt-5 flex items-center justify-between">
-            <span class="text-[10px] uppercase wo text-hot">Hot</span>
-            <a class="text-[11px] uppercase tracking-widest hover:text-volt" href="mailto:dnccomputerz@gmail.com?subject=HOLD%20%23021%20ThinkPad%20T14">Hold →</a>
-          </div>
-        </article>
-
-        <article class="item ticket js-card bg-steel border border-rail ticket-dash p-4 flex flex-col" data-cat="screens" data-sku="008" data-title="27 144hz panel" data-status="open">
-          <div class="flex items-start justify-between gap-3 mb-4">
-            <p class="text-[10px] uppercase wo text-mute">#008 · screen</p>
-            <span class="sticker bg-tag text-pit text-[11px] font-semibold px-2 py-1">$95</span>
-          </div>
-          <h3 class="font-display font-bold text-xl">27" 144Hz panel</h3>
-          <p class="text-mute text-xs mt-2">1080p IPS. Stand included. No dead pixels.</p>
-          <p class="text-[11px] text-mute mt-3">Used · tested · city TBA on hold</p>
-          <div class="mt-auto pt-5 flex items-center justify-between">
-            <span class="text-[10px] uppercase wo text-volt">Open</span>
-            <a class="text-[11px] uppercase tracking-widest hover:text-volt" href="mailto:dnccomputerz@gmail.com?subject=HOLD%20%23008%2027%20panel">Hold →</a>
-          </div>
-        </article>
-
-        <article class="item ticket js-card bg-steel border border-rail ticket-dash p-4 flex flex-col" data-cat="parts" data-sku="033" data-title="rtx 3060 12gb" data-status="open">
-          <div class="flex items-start justify-between gap-3 mb-4">
-            <p class="text-[10px] uppercase wo text-mute">#033 · part</p>
-            <span class="sticker r bg-tag text-pit text-[11px] font-semibold px-2 py-1">$180</span>
-          </div>
-          <h3 class="font-display font-bold text-xl">RTX 3060 12GB</h3>
-          <p class="text-mute text-xs mt-2">Dual fan. Temps fine under load.</p>
-          <p class="text-[11px] text-mute mt-3">Used · bench tested · city TBA on hold</p>
-          <div class="mt-auto pt-5 flex items-center justify-between">
-            <span class="text-[10px] uppercase wo text-volt">Open</span>
-            <a class="text-[11px] uppercase tracking-widest hover:text-volt" href="mailto:dnccomputerz@gmail.com?subject=HOLD%20%23033%20RTX%203060">Hold →</a>
-          </div>
-        </article>
-
-        <article class="item ticket js-card bg-steel border border-rail ticket-dash p-4 flex flex-col opacity-70" data-cat="laptops" data-sku="017" data-title="hp elitebook 840" data-status="sold">
-          <div class="flex items-start justify-between gap-3 mb-4">
-            <p class="text-[10px] uppercase wo text-mute">#017 · laptop</p>
-            <span class="sticker bg-hot text-paper text-[11px] font-semibold px-2 py-1">SOLD</span>
-          </div>
-          <h3 class="font-display font-bold text-xl">HP EliteBook 840</h3>
-          <p class="text-mute text-xs mt-2">i7 / 16GB / 512GB. Gone.</p>
-          <p class="text-[11px] text-mute mt-3">Sold · leave on the board as proof the lot moves</p>
-          <div class="mt-auto pt-5 flex items-center justify-between">
-            <span class="text-[10px] uppercase wo text-hot">Sold</span>
-            <span class="text-[11px] uppercase tracking-widest text-mute">—</span>
-          </div>
-        </article>
-
-        <article class="item ticket js-card bg-steel border border-rail ticket-dash p-4 flex flex-col" data-cat="towers" data-sku="041" data-title="i5 gaming mid tower" data-status="open">
-          <div class="flex items-start justify-between gap-3 mb-4">
-            <p class="text-[10px] uppercase wo text-mute">#041 · tower</p>
-            <span class="sticker bg-tag text-pit text-[11px] font-semibold px-2 py-1">$390</span>
-          </div>
-          <h3 class="font-display font-bold text-xl">i5 gaming mid tower</h3>
-          <p class="text-mute text-xs mt-2">i5-10400F / 16GB / 1TB SSD / GTX 1660 Super.</p>
-          <p class="text-[11px] text-mute mt-3">Used · rebuilt · city TBA on hold</p>
-          <div class="mt-auto pt-5 flex items-center justify-between">
-            <span class="text-[10px] uppercase wo text-volt">Open</span>
-            <a class="text-[11px] uppercase tracking-widest hover:text-volt" href="mailto:dnccomputerz@gmail.com?subject=HOLD%20%23041%20i5%20gaming%20tower">Hold →</a>
-          </div>
-        </article>
-
-        <article class="item ticket js-card bg-steel border border-rail ticket-dash p-4 flex flex-col" data-cat="parts" data-sku="052" data-title="32gb ddr4 kit" data-status="open">
-          <div class="flex items-start justify-between gap-3 mb-4">
-            <p class="text-[10px] uppercase wo text-mute">#052 · part</p>
-            <span class="sticker r bg-tag text-pit text-[11px] font-semibold px-2 py-1">$55</span>
-          </div>
-          <h3 class="font-display font-bold text-xl">32GB DDR4 kit</h3>
-          <p class="text-mute text-xs mt-2">2×16GB 3200. Both sticks read in memtest.</p>
-          <p class="text-[11px] text-mute mt-3">Used · tested · city TBA on hold</p>
-          <div class="mt-auto pt-5 flex items-center justify-between">
-            <span class="text-[10px] uppercase wo text-volt">Open</span>
-            <a class="text-[11px] uppercase tracking-widest hover:text-volt" href="mailto:dnccomputerz@gmail.com?subject=HOLD%20%23052%20DDR4%20kit">Hold →</a>
-          </div>
-        </article>
-
-        <article class="item ticket js-card bg-steel border border-rail ticket-dash p-4 flex flex-col" data-cat="screens" data-sku="061" data-title="24 office panel pair" data-status="open">
-          <div class="flex items-start justify-between gap-3 mb-4">
-            <p class="text-[10px] uppercase wo text-mute">#061 · screen</p>
-            <span class="sticker bg-tag text-pit text-[11px] font-semibold px-2 py-1">$70</span>
-          </div>
-          <h3 class="font-display font-bold text-xl">24" office panel pair</h3>
-          <p class="text-mute text-xs mt-2">Two matching 1080p panels. HDMI + VGA.</p>
-          <p class="text-[11px] text-mute mt-3">Used · sold as pair · city TBA on hold</p>
-          <div class="mt-auto pt-5 flex items-center justify-between">
-            <span class="text-[10px] uppercase wo text-volt">Open</span>
-            <a class="text-[11px] uppercase tracking-widest hover:text-volt" href="mailto:dnccomputerz@gmail.com?subject=HOLD%20%23061%20panel%20pair">Hold →</a>
-          </div>
-        </article>
-
-        <article class="item ticket js-card bg-steel border border-rail ticket-dash p-4 flex flex-col" data-cat="laptops" data-sku="074" data-title="dell latitude 5420" data-status="open">
-          <div class="flex items-start justify-between gap-3 mb-4">
-            <p class="text-[10px] uppercase wo text-mute">#074 · laptop</p>
-            <span class="sticker r bg-tag text-pit text-[11px] font-semibold px-2 py-1">$245</span>
-          </div>
-          <h3 class="font-display font-bold text-xl">Dell Latitude 5420</h3>
-          <p class="text-mute text-xs mt-2">i5 / 16GB / 256GB. Ports clean. Charger in the bag.</p>
-          <p class="text-[11px] text-mute mt-3">Used · tested · city TBA on hold</p>
-          <div class="mt-auto pt-5 flex items-center justify-between">
-            <span class="text-[10px] uppercase wo text-volt">Open</span>
-            <a class="text-[11px] uppercase tracking-widest hover:text-volt" href="mailto:dnccomputerz@gmail.com?subject=HOLD%20%23074%20Latitude%205420">Hold →</a>
-          </div>
-        </article>
-
-        <article class="item ticket js-card bg-steel border border-rail ticket-dash p-4 flex flex-col" data-cat="parts" data-sku="088" data-title="1tb nvme drive" data-status="hot">
-          <div class="flex items-start justify-between gap-3 mb-4">
-            <p class="text-[10px] uppercase wo text-mute">#088 · part</p>
-            <span class="sticker bg-tag text-pit text-[11px] font-semibold px-2 py-1">$48</span>
-          </div>
-          <h3 class="font-display font-bold text-xl">1TB NVMe drive</h3>
-          <p class="text-mute text-xs mt-2">Health 97%. Wiped. Sits in an adapter if you need SATA.</p>
-          <p class="text-[11px] text-mute mt-3">Used · health checked · city TBA on hold</p>
-          <div class="mt-auto pt-5 flex items-center justify-between">
-            <span class="text-[10px] uppercase wo text-hot">Hot</span>
-            <a class="text-[11px] uppercase tracking-widest hover:text-volt" href="mailto:dnccomputerz@gmail.com?subject=HOLD%20%23088%201TB%20NVMe">Hold →</a>
-          </div>
-        </article>
-
-      </div>
-      <p id="empty" class="hidden mt-10 text-sm text-mute">Nothing on the bench matches that.</p>
-    </section>
-
-    <section id="how" class="px-5 md:px-10 py-16 border-t border-rail">
-      <p class="js-fade text-[11px] uppercase wo text-mute mb-2">How a sale works</p>
-      <h2 class="js-fade font-display font-extrabold text-3xl md:text-4xl tracking-tight mb-10">Pick. Hold. Meet.</h2>
-      <ol class="grid md:grid-cols-3 gap-4">
-        <li class="js-fade bg-steel border border-rail p-5">
-          <p class="text-[10px] uppercase wo text-volt mb-3">01</p>
-          <h3 class="font-display font-bold text-xl mb-2">Pick a ticket</h3>
-          <p class="text-mute text-sm">Filter the lot. Price is the amber sticker. Hot means it will not sit.</p>
-        </li>
-        <li class="js-fade bg-steel border border-rail p-5">
-          <p class="text-[10px] uppercase wo text-volt mb-3">02</p>
-          <h3 class="font-display font-bold text-xl mb-2">Mail a hold</h3>
-          <p class="text-mute text-sm">Hold opens mail to dnccomputerz@gmail.com with the SKU in the subject.</p>
-        </li>
-        <li class="js-fade bg-steel border border-rail p-5">
-          <p class="text-[10px] uppercase wo text-volt mb-3">03</p>
-          <h3 class="font-display font-bold text-xl mb-2">Meet Dee</h3>
-          <p class="text-mute text-sm">City and window come in the reply. Cash or Cash App on sight. No shipping on this page.</p>
-        </li>
-      </ol>
-    </section>
-
-    <section id="ask" class="px-5 md:px-10 py-16 border-t border-rail">
-      <p class="text-[11px] uppercase wo text-mute mb-2">Direct line</p>
-      <h2 class="font-display font-extrabold text-3xl md:text-5xl tracking-tight">Ask Dee.</h2>
-      <p class="mt-4 text-mute text-sm max-w-xl">Spec not on the board, first look at the next tower, or a hold that needs a photo — one mail. No form, no cart.</p>
-      <a href="mailto:dnccomputerz@gmail.com?subject=DNC%20COMPUTERZ%20ask" class="inline-flex mt-8 bg-volt text-pit font-display font-bold px-5 py-3 text-sm hover:brightness-110 transition">dnccomputerz@gmail.com</a>
-    </section>
-  </main>
-
-  <footer class="px-5 md:px-10 py-8 border-t border-rail text-[11px] uppercase tracking-widest text-mute flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-    <span>DNC COMPUTERZ · Dee’s lot · one file · client-owned</span>
-    <span>Tailwind CDN + anime.js · no build · ~0.5s</span>
-  </footer>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
-  <script>
-    (function () {
-      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (window.anime && !reduce) {
-        anime({ targets: '.js-fade', opacity: [0, 1], translateY: [12, 0], delay: anime.stagger(70), duration: 480, easing: 'easeOutQuad' });
-        anime({ targets: '.js-card', opacity: [0, 1], translateY: [16, 0], delay: anime.stagger(40, { start: 180 }), duration: 420, easing: 'easeOutQuad' });
-      }
-      var chips = document.querySelectorAll('.chip');
-      var items = document.querySelectorAll('.item');
-      var q = document.getElementById('q');
-      var count = document.getElementById('count');
-      var empty = document.getElementById('empty');
-      var filter = 'all';
-      function run() {
-        var term = (q.value || '').toLowerCase().trim();
-        var n = 0;
-        items.forEach(function (el) {
-          var hay = ((el.getAttribute('data-title') || '') + ' ' + (el.getAttribute('data-sku') || '') + ' #' + (el.getAttribute('data-sku') || '') + ' ' + (el.getAttribute('data-status') || '')).toLowerCase();
-          var ok = (filter === 'all' || el.getAttribute('data-cat') === filter) && (!term || hay.indexOf(term) !== -1);
-          el.classList.toggle('is-off', !ok);
-          if (ok) n++;
-        });
-        count.textContent = n + (n === 1 ? ' ticket' : ' tickets');
-        empty.classList.toggle('hidden', n !== 0);
-      }
-      chips.forEach(function (btn) {
-        btn.addEventListener('click', function () {
-          filter = btn.getAttribute('data-filter');
-          chips.forEach(function (c) { c.classList.toggle('is-on', c === btn); });
-          run();
-        });
-      });
-      q.addEventListener('input', run);
-    })();
-  </script>
+<div class="grain" aria-hidden="true"></div>
+<header class="sticky top-0 z-30 flex items-center justify-between px-5 md:px-10 py-4 border-b border-rail bg-pit/92 backdrop-blur">
+<a href="#top" class="font-display font-extrabold tracking-tight text-lg flex items-center gap-3">DNC COMPUTERZ<span class="block w-2 h-2 bg-volt"></span></a>
+<nav class="hidden sm:flex items-center gap-6 text-[11px] uppercase tracking-widest text-mute">
+<a href="#lot" class="hover:text-paper transition-colors">Lot</a>
+<a href="#how" class="hover:text-paper transition-colors">How</a>
+<a href="#rules" class="hover:text-paper transition-colors">Pickup</a>
+<a href="#ask" class="text-paper hover:text-volt transition-colors">Ask Dee</a>
+</nav>
+<a href="mailto:dnccomputerz@gmail.com?subject=DNC%20COMPUTERZ%20hold" class="text-[11px] uppercase tracking-widest text-volt">Hold →</a>
+</header>
+<div class="border-b border-rail overflow-hidden bg-steel/70" aria-hidden="true"><div class="crawl flex whitespace-nowrap text-[11px] uppercase tracking-widest text-mute py-2"><span class="px-6">#014 Ryzen 5 office tower · $220 · Open</span><span class="px-6 text-hot">#021 ThinkPad T14 · $310 · Hot</span><span class="px-6">#008 27 144Hz · $95 · Open</span><span class="px-6">#033 RTX 3060 · $180 · Open</span><span class="px-6 text-hot">#017 EliteBook · Sold</span><span class="px-6">#041 i5 mid tower · $390 · Open</span><span class="px-6">#052 32GB DDR4 · $55 · Open</span><span class="px-6">#061 24 panel pair · $70 · Open</span><span class="px-6">#014 Ryzen 5 office tower · $220 · Open</span><span class="px-6 text-hot">#021 ThinkPad T14 · $310 · Hot</span><span class="px-6">#008 27 144Hz · $95 · Open</span><span class="px-6">#033 RTX 3060 · $180 · Open</span><span class="px-6 text-hot">#017 EliteBook · Sold</span><span class="px-6">#041 i5 mid tower · $390 · Open</span><span class="px-6">#052 32GB DDR4 · $55 · Open</span><span class="px-6">#061 24 panel pair · $70 · Open</span></div></div>
+<main>
+<section id="top" class="relative scan px-5 md:px-10 pt-16 md:pt-24 pb-16 md:pb-20">
+<p class="js-fade text-[11px] uppercase wo text-mute mb-5">Work order · lot open · cash / Cash App on pickup</p>
+<h1 class="js-fade font-display font-extrabold text-5xl md:text-7xl leading-[0.92] tracking-tight max-w-4xl">The bench is open.<br />Price is on the <span class="text-tag">sticker</span>.</h1>
+<p class="js-fade mt-6 max-w-xl text-mute text-sm leading-relaxed">Towers, laptops, parts, and screens from Dee. Not a cart. Read the ticket, mail a hold, pick it up. Dummy SKUs — paste real titles, prices, city, Open / Hot / Sold.</p>
+<div class="js-fade mt-8 flex flex-wrap gap-3">
+<a href="#lot" class="inline-flex items-center gap-2 bg-volt text-pit font-display font-bold px-5 py-3 text-sm hover:brightness-110 transition">See the lot</a>
+<a href="mailto:dnccomputerz@gmail.com?subject=DNC%20COMPUTERZ%20what%20do%20you%20have" class="inline-flex items-center gap-2 border border-rail px-5 py-3 text-sm text-paper hover:border-volt hover:text-volt transition">Ask Dee</a>
+</div>
+</section>
+<section id="lot" class="px-5 md:px-10 py-16">
+<div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-8">
+<div><p class="text-[11px] uppercase wo text-mute mb-2">Current lot</p><h2 class="font-display font-extrabold text-3xl md:text-4xl tracking-tight">What’s on the bench</h2></div>
+<label class="block w-full md:w-80"><span class="sr-only">Search</span><input id="q" type="search" placeholder="Search title or #014" class="w-full bg-steel border border-rail px-3 py-2.5 text-sm text-paper placeholder:text-mute/70 outline-none focus:border-volt" /></label>
+</div>
+<div id="chips" class="flex flex-wrap gap-2 mb-8">
+<button type="button" class="chip is-on text-[11px] uppercase tracking-widest border border-rail px-3 py-1.5" data-filter="all">All</button>
+<button type="button" class="chip text-[11px] uppercase tracking-widest border border-rail px-3 py-1.5 text-mute" data-filter="towers">Towers</button>
+<button type="button" class="chip text-[11px] uppercase tracking-widest border border-rail px-3 py-1.5 text-mute" data-filter="laptops">Laptops</button>
+<button type="button" class="chip text-[11px] uppercase tracking-widest border border-rail px-3 py-1.5 text-mute" data-filter="parts">Parts</button>
+<button type="button" class="chip text-[11px] uppercase tracking-widest border border-rail px-3 py-1.5 text-mute" data-filter="screens">Screens</button>
+</div>
+<p id="count" class="text-[11px] uppercase wo text-mute mb-5">8 tickets</p>
+<div id="grid" class="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
+<article class="item ticket js-card bg-steel border border-rail ticket-dash flex flex-col" data-cat="towers" data-sku="014" data-title="ryzen 5 office tower"><div class="slot h-28 flex items-end justify-between px-4 py-3"><span class="text-[10px] uppercase wo text-mute">Photo slot</span></div><div class="p-4 flex flex-col flex-1"><div class="flex items-start justify-between gap-3 mb-3"><p class="text-[10px] uppercase wo text-mute">#014 · tower</p><span class="sticker bg-tag text-pit text-[11px] font-semibold px-2 py-1">$220</span></div><h3 class="font-display font-bold text-xl">Ryzen 5 office tower</h3><p class="text-mute text-xs mt-2">16GB / 512GB SSD. Boots clean.</p><p class="text-[11px] text-mute mt-3">Used · tested · local pickup</p><div class="mt-auto pt-5 flex items-center justify-between"><span class="text-[10px] uppercase wo text-volt">Open</span><a class="text-[11px] uppercase tracking-widest hover:text-volt" href="mailto:dnccomputerz@gmail.com?subject=HOLD%20%23014">Hold →</a></div></div></article>
+<article class="item ticket js-card bg-steel border border-rail ticket-dash flex flex-col" data-cat="laptops" data-sku="021" data-title="thinkpad t14 gen 2"><div class="slot h-28 flex items-end justify-between px-4 py-3"><span class="text-[10px] uppercase wo text-mute">Photo slot</span></div><div class="p-4 flex flex-col flex-1"><div class="flex items-start justify-between gap-3 mb-3"><p class="text-[10px] uppercase wo text-mute">#021 · laptop</p><span class="sticker bg-tag text-pit text-[11px] font-semibold px-2 py-1">$310</span></div><h3 class="font-display font-bold text-xl">ThinkPad T14 Gen 2</h3><p class="text-mute text-xs mt-2">i5 / 16GB / 256GB. Battery holds a workday.</p><p class="text-[11px] text-mute mt-3">Used · light marks · local pickup</p><div class="mt-auto pt-5 flex items-center justify-between"><span class="text-[10px] uppercase wo text-hot">Hot</span><a class="text-[11px] uppercase tracking-widest hover:text-volt" href="mailto:dnccomputerz@gmail.com?subject=HOLD%20%23021">Hold →</a></div></div></article>
+<article class="item ticket js-card bg-steel border border-rail ticket-dash flex flex-col" data-cat="screens" data-sku="008" data-title="27 144hz panel"><div class="slot h-28 flex items-end justify-between px-4 py-3"><span class="text-[10px] uppercase wo text-mute">Photo slot</span></div><div class="p-4 flex flex-col flex-1"><div class="flex items-start justify-between gap-3 mb-3"><p class="text-[10px] uppercase wo text-mute">#008 · screen</p><span class="sticker bg-tag text-pit text-[11px] font-semibold px-2 py-1">$95</span></div><h3 class="font-display font-bold text-xl">27" 144Hz panel</h3><p class="text-mute text-xs mt-2">1080p IPS. Stand included. No dead pixels.</p><p class="text-[11px] text-mute mt-3">Used · tested · local pickup</p><div class="mt-auto pt-5 flex items-center justify-between"><span class="text-[10px] uppercase wo text-volt">Open</span><a class="text-[11px] uppercase tracking-widest hover:text-volt" href="mailto:dnccomputerz@gmail.com?subject=HOLD%20%23008">Hold →</a></div></div></article>
+<article class="item ticket js-card bg-steel border border-rail ticket-dash flex flex-col" data-cat="parts" data-sku="033" data-title="rtx 3060 12gb"><div class="slot h-28 flex items-end justify-between px-4 py-3"><span class="text-[10px] uppercase wo text-mute">Photo slot</span></div><div class="p-4 flex flex-col flex-1"><div class="flex items-start justify-between gap-3 mb-3"><p class="text-[10px] uppercase wo text-mute">#033 · part</p><span class="sticker bg-tag text-pit text-[11px] font-semibold px-2 py-1">$180</span></div><h3 class="font-display font-bold text-xl">RTX 3060 12GB</h3><p class="text-mute text-xs mt-2">Dual fan. Temps fine under load.</p><p class="text-[11px] text-mute mt-3">Used · bench tested · local pickup</p><div class="mt-auto pt-5 flex items-center justify-between"><span class="text-[10px] uppercase wo text-volt">Open</span><a class="text-[11px] uppercase tracking-widest hover:text-volt" href="mailto:dnccomputerz@gmail.com?subject=HOLD%20%23033">Hold →</a></div></div></article>
+<article class="item ticket js-card bg-steel border border-rail ticket-dash flex flex-col opacity-70" data-cat="laptops" data-sku="017" data-title="hp elitebook 840"><div class="slot h-28 flex items-end justify-between px-4 py-3"><span class="text-[10px] uppercase wo text-hot">Gone</span></div><div class="p-4 flex flex-col flex-1"><div class="flex items-start justify-between gap-3 mb-3"><p class="text-[10px] uppercase wo text-mute">#017 · laptop</p><span class="sticker bg-hot text-paper text-[11px] font-semibold px-2 py-1">SOLD</span></div><h3 class="font-display font-bold text-xl">HP EliteBook 840</h3><p class="text-mute text-xs mt-2">i7 / 16GB / 512GB. Gone.</p><p class="text-[11px] text-mute mt-3">Sold · placeholder</p><div class="mt-auto pt-5 flex items-center justify-between"><span class="text-[10px] uppercase wo text-hot">Sold</span><span class="text-[11px] uppercase tracking-widest text-mute">—</span></div></div></article>
+<article class="item ticket js-card bg-steel border border-rail ticket-dash flex flex-col" data-cat="towers" data-sku="041" data-title="i5 gaming mid tower"><div class="slot h-28 flex items-end justify-between px-4 py-3"><span class="text-[10px] uppercase wo text-mute">Photo slot</span></div><div class="p-4 flex flex-col flex-1"><div class="flex items-start justify-between gap-3 mb-3"><p class="text-[10px] uppercase wo text-mute">#041 · tower</p><span class="sticker bg-tag text-pit text-[11px] font-semibold px-2 py-1">$390</span></div><h3 class="font-display font-bold text-xl">i5 gaming mid tower</h3><p class="text-mute text-xs mt-2">i5-10400F / 16GB / 1TB SSD / GTX 1660 Super.</p><p class="text-[11px] text-mute mt-3">Used · rebuilt · local pickup</p><div class="mt-auto pt-5 flex items-center justify-between"><span class="text-[10px] uppercase wo text-volt">Open</span><a class="text-[11px] uppercase tracking-widest hover:text-volt" href="mailto:dnccomputerz@gmail.com?subject=HOLD%20%23041">Hold →</a></div></div></article>
+<article class="item ticket js-card bg-steel border border-rail ticket-dash flex flex-col" data-cat="parts" data-sku="052" data-title="32gb ddr4 kit"><div class="slot h-28 flex items-end justify-between px-4 py-3"><span class="text-[10px] uppercase wo text-mute">Photo slot</span></div><div class="p-4 flex flex-col flex-1"><div class="flex items-start justify-between gap-3 mb-3"><p class="text-[10px] uppercase wo text-mute">#052 · part</p><span class="sticker bg-tag text-pit text-[11px] font-semibold px-2 py-1">$55</span></div><h3 class="font-display font-bold text-xl">32GB DDR4 kit</h3><p class="text-mute text-xs mt-2">2×16GB 3200. Both sticks read in memtest.</p><p class="text-[11px] text-mute mt-3">Used · tested · local pickup</p><div class="mt-auto pt-5 flex items-center justify-between"><span class="text-[10px] uppercase wo text-volt">Open</span><a class="text-[11px] uppercase tracking-widest hover:text-volt" href="mailto:dnccomputerz@gmail.com?subject=HOLD%20%23052">Hold →</a></div></div></article>
+<article class="item ticket js-card bg-steel border border-rail ticket-dash flex flex-col" data-cat="screens" data-sku="061" data-title="24 office panel pair"><div class="slot h-28 flex items-end justify-between px-4 py-3"><span class="text-[10px] uppercase wo text-mute">Photo slot</span></div><div class="p-4 flex flex-col flex-1"><div class="flex items-start justify-between gap-3 mb-3"><p class="text-[10px] uppercase wo text-mute">#061 · screen</p><span class="sticker bg-tag text-pit text-[11px] font-semibold px-2 py-1">$70</span></div><h3 class="font-display font-bold text-xl">24" office panel pair</h3><p class="text-mute text-xs mt-2">Two matching 1080p panels. HDMI + VGA.</p><p class="text-[11px] text-mute mt-3">Used · sold as pair · local pickup</p><div class="mt-auto pt-5 flex items-center justify-between"><span class="text-[10px] uppercase wo text-volt">Open</span><a class="text-[11px] uppercase tracking-widest hover:text-volt" href="mailto:dnccomputerz@gmail.com?subject=HOLD%20%23061">Hold →</a></div></div></article>
+</div>
+<p id="empty" class="hidden mt-10 text-sm text-mute">Nothing on the bench matches that.</p>
+</section>
+<section id="how" class="px-5 md:px-10 py-16 border-t border-rail">
+<p class="js-fade text-[11px] uppercase wo text-mute mb-2">How a sale works</p>
+<h2 class="js-fade font-display font-extrabold text-3xl md:text-4xl tracking-tight mb-10">Pick. Hold. Meet.</h2>
+<ol class="grid md:grid-cols-3 gap-4">
+<li class="js-fade bg-steel border border-rail p-5"><p class="text-[10px] uppercase wo text-volt mb-3">01</p><h3 class="font-display font-bold text-xl mb-2">Pick a ticket</h3><p class="text-mute text-sm">Filter the lot. Price is the sticker.</p></li>
+<li class="js-fade bg-steel border border-rail p-5"><p class="text-[10px] uppercase wo text-volt mb-3">02</p><h3 class="font-display font-bold text-xl mb-2">Mail a hold</h3><p class="text-mute text-sm">Hold opens mail to dnccomputerz@gmail.com with the SKU.</p></li>
+<li class="js-fade bg-steel border border-rail p-5"><p class="text-[10px] uppercase wo text-volt mb-3">03</p><h3 class="font-display font-bold text-xl mb-2">Meet Dee</h3><p class="text-mute text-sm">City and window in the reply. Cash or Cash App on sight.</p></li>
+</ol>
+</section>
+<section id="rules" class="px-5 md:px-10 py-16 border-t border-rail">
+<p class="js-fade text-[11px] uppercase wo text-mute mb-2">House rules</p>
+<h2 class="js-fade font-display font-extrabold text-3xl md:text-4xl tracking-tight mb-8">Pickup, not a warehouse.</h2>
+<div class="grid md:grid-cols-2 gap-4 max-w-4xl">
+<p class="js-fade bg-steel border border-rail p-5 text-sm text-mute leading-relaxed"><span class="text-paper">City.</span> Placeholder — Dee names the metro next. Local pickup only on v1.</p>
+<p class="js-fade bg-steel border border-rail p-5 text-sm text-mute leading-relaxed"><span class="text-paper">Holds.</span> A hold is a reply, not a lock forever. Quiet replies put the ticket back on the bench.</p>
+<p class="js-fade bg-steel border border-rail p-5 text-sm text-mute leading-relaxed"><span class="text-paper">Tested.</span> Machines boot. Parts get a bench pass. Screens get a white-page check.</p>
+<p class="js-fade bg-steel border border-rail p-5 text-sm text-mute leading-relaxed"><span class="text-paper">Pay.</span> Cash or Cash App when you see it. No shipping or checkout on this file.</p>
+</div>
+</section>
+<section id="ask" class="px-5 md:px-10 py-16 border-t border-rail">
+<p class="text-[11px] uppercase wo text-mute mb-2">Direct line</p>
+<h2 class="font-display font-extrabold text-3xl md:text-5xl tracking-tight">Ask Dee.</h2>
+<p class="mt-4 text-mute text-sm max-w-xl">Spec not on the board, or first look on the next tower — one mail. No form.</p>
+<a href="mailto:dnccomputerz@gmail.com?subject=DNC%20COMPUTERZ%20ask" class="inline-flex mt-8 bg-volt text-pit font-display font-bold px-5 py-3 text-sm hover:brightness-110 transition">dnccomputerz@gmail.com</a>
+</section>
+</main>
+<footer class="px-5 md:px-10 py-8 border-t border-rail text-[11px] uppercase tracking-widest text-mute flex flex-col sm:flex-row sm:justify-between gap-3"><span>DNC COMPUTERZ · Dee’s lot · one file · client-owned</span><a href="mailto:dnccomputerz@gmail.com" class="text-volt">dnccomputerz@gmail.com</a></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
+<script>
+(function(){
+var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+if(window.anime&&!reduce){anime({targets:'.js-fade',opacity:[0,1],translateY:[12,0],delay:anime.stagger(70),duration:480,easing:'easeOutQuad'});anime({targets:'.js-card',opacity:[0,1],translateY:[16,0],delay:anime.stagger(40,{start:180}),duration:420,easing:'easeOutQuad'});}
+var chips=document.querySelectorAll('.chip'),items=document.querySelectorAll('.item'),q=document.getElementById('q'),count=document.getElementById('count'),empty=document.getElementById('empty'),filter='all';
+function run(){var term=(q.value||'').toLowerCase().trim(),n=0;items.forEach(function(el){var hay=((el.getAttribute('data-title')||'')+' '+(el.getAttribute('data-sku')||'')+' #'+(el.getAttribute('data-sku')||'')).toLowerCase();var ok=(filter==='all'||el.getAttribute('data-cat')===filter)&&(!term||hay.indexOf(term)!==-1);el.classList.toggle('is-off',!ok);if(ok)n++;});count.textContent=n+(n===1?' ticket':' tickets');empty.classList.toggle('hidden',n!==0);}
+chips.forEach(function(btn){btn.addEventListener('click',function(){filter=btn.getAttribute('data-filter');chips.forEach(function(c){c.classList.toggle('is-on',c===btn);c.classList.toggle('text-mute',c!==btn);});run();});});
+q.addEventListener('input',run);
+})();
+</script>
 </body>
 </html>
