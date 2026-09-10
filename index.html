@@ -4,7 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DNC COMPUTERZ — The lot is live</title>
-  <meta name="description" content="Dee’s bench. Towers, laptops, parts, and peripherals priced to move. See it, ask, pick it up." />
+  <meta name="description" content="Dee’s bench. Towers, laptops, parts, and screens priced on the card. See it, ask, pick it up." />
+  <meta name="theme-color" content="#080A0D" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23080A0D'/%3E%3Crect x='6' y='14' width='20' height='4' fill='%234D8BFF'/%3E%3Crect x='22' y='8' width='4' height='16' fill='%23F5C542'/%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -40,18 +41,35 @@
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     }
     .scan {
-      background-image:
-        linear-gradient(rgba(77,139,255,.05) 1px, transparent 1px);
+      background-image: linear-gradient(rgba(77,139,255,.05) 1px, transparent 1px);
       background-size: 100% 28px;
     }
     .item.hidden { display: none; }
     .chip.is-on { background: #4D8BFF; color: #080A0D; border-color: #4D8BFF; }
+    .ticker {
+      display: flex;
+      width: max-content;
+      animation: tick 28s linear infinite;
+    }
+    @keyframes tick {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .ticker { animation: none; }
+    }
+    .sticker {
+      background: #F5C542;
+      color: #080A0D;
+      transform: rotate(-2deg);
+      box-shadow: 2px 3px 0 #080A0D;
+    }
   </style>
 </head>
 <body class="font-mono antialiased overflow-x-hidden">
   <div class="grain" aria-hidden="true"></div>
 
-  <header class="relative z-20 flex items-center justify-between px-5 md:px-10 py-4 border-b border-rail">
+  <header class="sticky top-0 z-30 flex items-center justify-between px-5 md:px-10 py-4 border-b border-rail bg-pit/90 backdrop-blur-sm">
     <a href="#top" class="font-display font-extrabold tracking-tight text-lg flex items-center gap-3">
       DNC COMPUTERZ
       <span class="block w-2 h-2 bg-volt" aria-hidden="true"></span>
@@ -65,7 +83,7 @@
   </header>
 
   <section id="top" class="relative z-10 px-5 md:px-10 pt-16 md:pt-24 pb-14 md:pb-20 scan">
-    <p class="text-tag text-xs uppercase tracking-[0.2em] mb-5">Dee · items on the bench</p>
+    <p class="text-tag text-xs uppercase tracking-[0.2em] mb-5">Ticket · Dee · bench stock</p>
     <h1 class="font-display font-extrabold leading-[0.92] text-5xl md:text-7xl tracking-tight max-w-4xl">
       The lot is live.<br />
       Prices on the cards.
@@ -87,7 +105,7 @@
     <dl class="mt-14 grid grid-cols-2 md:grid-cols-4 gap-px bg-rail border border-rail max-w-3xl">
       <div class="bg-pit p-4">
         <dt class="text-[10px] uppercase tracking-widest text-mute">Contact</dt>
-        <dd class="mt-1 text-sm">dnccomputerz@gmail.com</dd>
+        <dd class="mt-1 text-sm break-all">dnccomputerz@gmail.com</dd>
       </div>
       <div class="bg-pit p-4">
         <dt class="text-[10px] uppercase tracking-widest text-mute">Move</dt>
@@ -105,16 +123,17 @@
   </section>
 
   <div class="relative z-10 border-y border-rail overflow-hidden py-3 text-[11px] tracking-widest uppercase text-mute">
-    <div class="flex gap-8 whitespace-nowrap px-5">
-      <span>No storefront rent</span>
-      <span class="text-volt">/</span>
-      <span>Price on the sticker</span>
-      <span class="text-volt">/</span>
-      <span>Ask before you drive</span>
-      <span class="text-volt">/</span>
-      <span>Sold means sold</span>
-      <span class="text-volt">/</span>
-      <span>Dee answers the mail</span>
+    <div class="ticker" aria-hidden="true">
+      <span class="px-5">No storefront rent</span><span class="text-volt">/</span>
+      <span class="px-5">Price on the sticker</span><span class="text-volt">/</span>
+      <span class="px-5">Ask before you drive</span><span class="text-volt">/</span>
+      <span class="px-5">Sold means sold</span><span class="text-volt">/</span>
+      <span class="px-5">Dee answers the mail</span><span class="text-volt">/</span>
+      <span class="px-5">No storefront rent</span><span class="text-volt">/</span>
+      <span class="px-5">Price on the sticker</span><span class="text-volt">/</span>
+      <span class="px-5">Ask before you drive</span><span class="text-volt">/</span>
+      <span class="px-5">Sold means sold</span><span class="text-volt">/</span>
+      <span class="px-5">Dee answers the mail</span><span class="text-volt">/</span>
     </div>
   </div>
 
@@ -124,7 +143,7 @@
         <p class="text-[11px] uppercase tracking-widest text-mute mb-3">On the bench now</p>
         <h2 class="font-display font-extrabold text-3xl md:text-5xl tracking-tight">Sample lot — swap your real SKUs</h2>
       </div>
-      <div id="chips" class="flex flex-wrap gap-2 text-[11px] uppercase tracking-wide">
+      <div id="chips" class="flex flex-wrap gap-2 text-[11px] uppercase tracking-wide" role="tablist" aria-label="Filter the lot">
         <button type="button" data-filter="all" class="chip is-on border border-rail px-3 py-1.5">All</button>
         <button type="button" data-filter="tower" class="chip border border-rail px-3 py-1.5 text-mute hover:text-paper">Towers</button>
         <button type="button" data-filter="laptop" class="chip border border-rail px-3 py-1.5 text-mute hover:text-paper">Laptops</button>
@@ -139,12 +158,12 @@
           <span>Tower · #014</span>
           <span class="text-tag">Open</span>
         </div>
-        <div class="mt-6 h-28 border border-rail bg-pit flex items-end p-3">
+        <div class="mt-6 h-28 border border-rail bg-pit flex items-end justify-between p-3">
           <span class="font-display font-extrabold text-4xl text-volt/80 leading-none">R5</span>
+          <span class="sticker text-[11px] font-semibold px-2 py-1">$280</span>
         </div>
         <h3 class="font-display font-bold text-xl mt-4">Ryzen 5 office tower</h3>
         <p class="mt-2 text-sm text-mute leading-relaxed">16GB · 512GB NVMe · quiet case. Good daily driver. Tested boot.</p>
-        <p class="mt-4 font-display font-extrabold text-2xl text-tag">$280</p>
         <a href="mailto:dnccomputerz@gmail.com?subject=Hold%20%23014%20Ryzen%205%20tower&body=I%20want%20the%20Ryzen%205%20office%20tower%20(%24280)." class="mt-4 inline-block text-xs uppercase tracking-wide text-volt hover:text-tag">Ask to hold →</a>
       </article>
 
@@ -153,12 +172,12 @@
           <span>Laptop · #021</span>
           <span class="text-tag">Open</span>
         </div>
-        <div class="mt-6 h-28 border border-rail bg-pit flex items-end p-3">
+        <div class="mt-6 h-28 border border-rail bg-pit flex items-end justify-between p-3">
           <span class="font-display font-extrabold text-4xl text-volt/80 leading-none">T14</span>
+          <span class="sticker text-[11px] font-semibold px-2 py-1">$340</span>
         </div>
         <h3 class="font-display font-bold text-xl mt-4">ThinkPad T14 Gen 2</h3>
         <p class="mt-2 text-sm text-mute leading-relaxed">i5 · 16GB · 256GB. Battery holds a work day. Keys clean. Charger in the box.</p>
-        <p class="mt-4 font-display font-extrabold text-2xl text-tag">$340</p>
         <a href="mailto:dnccomputerz@gmail.com?subject=Hold%20%23021%20ThinkPad%20T14&body=I%20want%20the%20ThinkPad%20T14%20(%24340)." class="mt-4 inline-block text-xs uppercase tracking-wide text-volt hover:text-tag">Ask to hold →</a>
       </article>
 
@@ -167,12 +186,12 @@
           <span>Screen · #008</span>
           <span class="text-hot">Hot</span>
         </div>
-        <div class="mt-6 h-28 border border-rail bg-pit flex items-end p-3">
+        <div class="mt-6 h-28 border border-rail bg-pit flex items-end justify-between p-3">
           <span class="font-display font-extrabold text-4xl text-volt/80 leading-none">144</span>
+          <span class="sticker text-[11px] font-semibold px-2 py-1">$120</span>
         </div>
         <h3 class="font-display font-bold text-xl mt-4">27″ 144Hz panel</h3>
         <p class="mt-2 text-sm text-mute leading-relaxed">IPS, HDMI + DP. Stand included. One hairline on the bezel, not the glass.</p>
-        <p class="mt-4 font-display font-extrabold text-2xl text-tag">$120</p>
         <a href="mailto:dnccomputerz@gmail.com?subject=Hold%20%23008%2027%20inch%20144Hz&body=I%20want%20the%2027%20inch%20144Hz%20panel%20(%24120)." class="mt-4 inline-block text-xs uppercase tracking-wide text-volt hover:text-tag">Ask to hold →</a>
       </article>
 
@@ -181,12 +200,12 @@
           <span>Part · #033</span>
           <span class="text-tag">Open</span>
         </div>
-        <div class="mt-6 h-28 border border-rail bg-pit flex items-end p-3">
+        <div class="mt-6 h-28 border border-rail bg-pit flex items-end justify-between p-3">
           <span class="font-display font-extrabold text-4xl text-volt/80 leading-none">3060</span>
+          <span class="sticker text-[11px] font-semibold px-2 py-1">$190</span>
         </div>
         <h3 class="font-display font-bold text-xl mt-4">RTX 3060 12GB</h3>
         <p class="mt-2 text-sm text-mute leading-relaxed">Dual fan. No artifacting on loop. Local test only — no ship on this one.</p>
-        <p class="mt-4 font-display font-extrabold text-2xl text-tag">$190</p>
         <a href="mailto:dnccomputerz@gmail.com?subject=Hold%20%23033%20RTX%203060&body=I%20want%20the%20RTX%203060%2012GB%20(%24190)." class="mt-4 inline-block text-xs uppercase tracking-wide text-volt hover:text-tag">Ask to hold →</a>
       </article>
 
@@ -195,12 +214,12 @@
           <span>Part · #041</span>
           <span class="text-tag">Open</span>
         </div>
-        <div class="mt-6 h-28 border border-rail bg-pit flex items-end p-3">
+        <div class="mt-6 h-28 border border-rail bg-pit flex items-end justify-between p-3">
           <span class="font-display font-extrabold text-4xl text-volt/80 leading-none">1TB</span>
+          <span class="sticker text-[11px] font-semibold px-2 py-1">$55</span>
         </div>
         <h3 class="font-display font-bold text-xl mt-4">1TB NVMe (used)</h3>
         <p class="mt-2 text-sm text-mute leading-relaxed">Health check printed on request. Fast enough for a boot + games drive.</p>
-        <p class="mt-4 font-display font-extrabold text-2xl text-tag">$55</p>
         <a href="mailto:dnccomputerz@gmail.com?subject=Hold%20%23041%201TB%20NVMe&body=I%20want%20the%201TB%20NVMe%20(%2455)." class="mt-4 inline-block text-xs uppercase tracking-wide text-volt hover:text-tag">Ask to hold →</a>
       </article>
 
@@ -209,12 +228,12 @@
           <span>Laptop · #009</span>
           <span class="text-hot">Sold</span>
         </div>
-        <div class="mt-6 h-28 border border-rail bg-pit flex items-end p-3">
+        <div class="mt-6 h-28 border border-rail bg-pit flex items-end justify-between p-3">
           <span class="font-display font-extrabold text-4xl text-mute leading-none">AIR</span>
+          <span class="bg-rail text-mute text-[11px] font-semibold px-2 py-1 line-through">$210</span>
         </div>
         <h3 class="font-display font-bold text-xl mt-4">MacBook Air 2017</h3>
         <p class="mt-2 text-sm text-mute leading-relaxed">Gone this week. Left on the board so you can see how fast a card flips.</p>
-        <p class="mt-4 font-display font-extrabold text-2xl text-mute line-through">$210</p>
         <span class="mt-4 inline-block text-xs uppercase tracking-wide text-mute">Off the bench</span>
       </article>
     </div>
@@ -272,7 +291,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      if (window.anime) {
+      if (window.anime && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
         anime({
           targets: "#top, #lot, #how, #ask",
           opacity: [0, 1],
