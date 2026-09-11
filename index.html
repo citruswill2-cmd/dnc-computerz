@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>DNC COMPUTERZ — bench lot</title>
-  <meta name="description" content="Dee’s bench lot. Towers, laptops, parts, and screens. Local holds by email. No cart." />
+  <meta name="description" content="Dee’s bench lot. Towers, laptops, parts, and screens with sticker prices. Local holds by email. No cart." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
@@ -51,7 +51,10 @@
     .hidden-card { display: none !important; }
     .ticker-track { animation: tick 28s linear infinite; }
     @keyframes tick { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-    @media (prefers-reduced-motion: reduce) { .ticker-track { animation: none; } html { scroll-behavior: auto; } }
+    @media (prefers-reduced-motion: reduce) {
+      .ticker-track { animation: none; }
+      html { scroll-behavior: auto; }
+    }
   </style>
 </head>
 <body class="grain font-mono text-paper antialiased">
@@ -129,40 +132,45 @@
         <h2 class="mt-2 font-display text-3xl font-bold">Bench first.</h2>
         <ul class="mt-6 max-w-2xl space-y-3 text-sm text-mute">
           <li>— Holds last until Dee says otherwise. First confirmed email wins.</li>
-          <li>— Tested on the bench. Ask if you want a specific check before you drive.</li>
-          <li>— Local pickup. City and hours land in the refine pass.</li>
-          <li>— Cash / agreed transfer. No card reader on v1.</li>
-          <li>— Sold means gone. Don’t email that SKU unless you want the next one like it.</li>
+          <li>— Tested on the bench before it leaves. Ask if you want a specific check.</li>
+          <li>— Local pickup only on v1. City / hours get written in on the refine pass.</li>
+          <li>— Cash or whatever Dee confirms in the hold thread. No storefront hours.</li>
         </ul>
+        <a href="mailto:dnccomputerz@gmail.com?subject=DNC%20COMPUTERZ%20%E2%80%94%20Ask%20Dee" class="mt-8 inline-block bg-volt px-5 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-pit">Ask Dee</a>
       </div>
     </section>
-    <section id="ask" class="fade-in mx-auto max-w-6xl px-4 py-16">
-      <h2 class="font-display text-3xl font-bold">Need a machine that isn’t on the wall?</h2>
-      <p class="mt-3 max-w-xl text-sm text-mute">Tell Dee the job, the budget, and whether it has to be quiet. Same mailbox as the holds.</p>
-      <a href="mailto:dnccomputerz@gmail.com?subject=DNC%20COMPUTERZ%20%E2%80%94%20Ask%20Dee" class="mt-6 inline-block bg-volt px-5 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-pit">dnccomputerz@gmail.com</a>
-    </section>
   </main>
-  <footer class="border-t border-edge px-4 py-8 text-center text-[11px] uppercase tracking-[0.2em] text-mute">DNC COMPUTERZ · client-owned file · REDLINE draft</footer>
+  <footer class="border-t border-edge px-4 py-8 text-center text-[11px] uppercase tracking-[0.2em] text-mute">
+    DNC COMPUTERZ · dummy SKUs until Dee pastes the real lot · dnccomputerz@gmail.com
+  </footer>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
   <script>
     (function () {
-      var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      if (!reduce && window.anime) {
-        anime({ targets: ".fade-in", opacity: [0, 1], translateY: [10, 0], delay: anime.stagger(60), duration: 480, easing: "easeOutQuad" });
+      var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (!reduced && window.anime) {
+        anime({
+          targets: ".fade-in",
+          opacity: [0, 1],
+          translateY: [10, 0],
+          easing: "easeOutQuad",
+          duration: 500,
+          delay: anime.stagger(40)
+        });
       }
       var filter = "all";
-      var q = "";
+      var q = document.getElementById("q");
       var cards = Array.prototype.slice.call(document.querySelectorAll(".ticket-card"));
       var empty = document.getElementById("empty");
-      var buttons = document.querySelectorAll(".filter-btn");
+      var buttons = Array.prototype.slice.call(document.querySelectorAll(".filter-btn"));
       function apply() {
+        var term = (q.value || "").toLowerCase().trim();
         var shown = 0;
         cards.forEach(function (card) {
           var cat = card.getAttribute("data-cat");
-          var text = (card.getAttribute("data-text") || "").toLowerCase();
+          var text = card.getAttribute("data-text") || "";
           var okCat = filter === "all" || cat === filter;
-          var okQ = !q || text.indexOf(q) !== -1;
-          var show = okCat && okQ;
+          var okText = !term || text.indexOf(term) !== -1;
+          var show = okCat && okText;
           card.classList.toggle("hidden-card", !show);
           if (show) shown += 1;
         });
@@ -173,19 +181,16 @@
           filter = btn.getAttribute("data-filter");
           buttons.forEach(function (b) {
             var on = b === btn;
-            b.classList.toggle("bg-volt", on);
             b.classList.toggle("border-volt", on);
+            b.classList.toggle("bg-volt", on);
             b.classList.toggle("text-pit", on);
-            b.classList.toggle("text-mute", !on);
             b.classList.toggle("border-edge", !on);
+            b.classList.toggle("text-mute", !on);
           });
           apply();
         });
       });
-      document.getElementById("q").addEventListener("input", function (e) {
-        q = (e.target.value || "").toLowerCase().trim();
-        apply();
-      });
+      q.addEventListener("input", apply);
     })();
   </script>
 </body>
