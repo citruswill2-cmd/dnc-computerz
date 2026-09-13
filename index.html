@@ -35,10 +35,10 @@
 </div>
 <main>
 <section id="top" class="mx-auto max-w-6xl px-4 py-16">
-  <p class="text-[11px] uppercase tracking-widest text-lime">Bench lot · local holds</p>
+  <p class="text-[11px] uppercase tracking-widest text-lime">Bench lot · live holds</p>
   <h1 class="hero-wash mt-4 font-display text-5xl font-extrabold leading-tight sm:text-7xl">Towers. Laptops.<br/>Parts. Screens.</h1>
-  <p class="mt-6 max-w-xl text-sm text-mute">Dee’s current pile, priced like shop tickets. Hold by email. Pickup after Dee confirms.</p>
-  <a href="#lot" class="mt-8 inline-block bg-lime px-5 py-3 text-xs font-semibold uppercase tracking-widest text-pit shadow-[0_0_24px_rgba(184,255,61,.45)]">See the lot</a>
+  <p class="mt-6 max-w-xl text-sm text-mute">Dee’s current pile. What he saves on the bench desk shows here for everybody.</p>
+  <a href="#lot" class="mt-8 inline-block bg-lime px-5 py-3 text-xs font-semibold uppercase tracking-widest text-pit">See the lot</a>
 </section>
 <section id="lot" class="border-t border-volt/20 bg-steel/70">
   <div class="mx-auto max-w-6xl px-4 py-14">
@@ -73,7 +73,7 @@
       <h2 class="font-display text-3xl font-bold text-volt">Bench desk</h2>
       <button id="admin-close" type="button" class="border border-edge px-3 py-2 text-[11px] uppercase text-mute">Back to lot</button>
     </div>
-    <p class="mt-2 text-sm text-mute">Stack multiple photos on one SKU. PIN: bench</p>
+    <p class="mt-2 text-sm text-lime" id="live-status">Save writes the public lot. Everybody sees it after a refresh.</p>
     <form id="item-form" class="mt-8 grid gap-3 border border-volt/30 bg-ticket p-4">
       <input type="hidden" id="f-id" />
       <div class="grid gap-3 sm:grid-cols-2">
@@ -92,10 +92,6 @@
         <button type="button" id="f-reset" class="border border-edge px-4 py-2 text-[11px] uppercase text-mute">Clear</button>
       </div>
     </form>
-    <div class="mt-6 flex flex-wrap gap-2">
-      <button type="button" id="btn-export" class="border border-volt px-3 py-2 text-[11px] uppercase text-volt">Download lot.json</button>
-      <label class="border border-edge px-3 py-2 text-[11px] uppercase text-mute">Import<input id="btn-import" type="file" accept="application/json" class="hidden" /></label>
-    </div>
     <div id="admin-list" class="mt-8 grid gap-3"></div>
   </div>
 </div>
@@ -112,7 +108,8 @@
 </div>
 <script>
 (function(){
-  var PIN='bench', STORE='dnc-lot-v2', AUTH='dnc-auth', MAIL='dnccomputerz@gmail.com';
+  var PIN='bench', AUTH='dnc-auth', MAIL='dnccomputerz@gmail.com';
+  var LIVE='https://crudcrud.com/api/171cb51e05cd4359ac820af50db89c82/catalog/6aa61fa6987ba203e8699c1a';
   var SEED=[
     {id:'T-1842',sku:'T-1842',title:'Office tower i7',spec:'i7 · 16GB · 512 SSD · Win 11',note:'Tested · Good',price:180,cat:'towers',state:'open',photos:[]},
     {id:'L-0911',sku:'L-0911',title:'ThinkPad T480',spec:'i5 · 8GB · 256 SSD · 14in',note:'Battery ok · Fair+',price:220,cat:'laptops',state:'open',photos:[]},
@@ -125,27 +122,39 @@
   ];
   var items=[], filter='all', q='', pendingPhotos=[];
   function norm(it){var photos=[]; if(Array.isArray(it.photos)) photos=it.photos.filter(Boolean); else if(it.photo) photos=[it.photo]; it.photos=photos; delete it.photo; return it;}
-  function loadLocal(){try{var r=localStorage.getItem(STORE)||localStorage.getItem('dnc-lot-v1'); if(r){var p=JSON.parse(r); if(Array.isArray(p)&&p.length) return p.map(norm);}}catch(e){} return null;}
-  function saveLocal(){try{localStorage.setItem(STORE,JSON.stringify(items));}catch(e){}}
+  function setStatus(msg,ok){var el=document.getElementById('live-status'); if(!el) return; el.textContent=msg; el.className='mt-2 text-sm '+(ok===false?'text-hot':'text-lime');}
+  function publishLive(){
+    setStatus('Publishing to the live lot…');
+    return fetch(LIVE,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({items:items})})
+      .then(function(r){ if(!r.ok) throw new Error('bad'); setStatus('Live. Anybody who refreshes sees this lot.'); })
+      .catch(function(){ setStatus('Could not reach the live lot. Ticket is only on this phone until it publishes.', false); });
+  }
+  function pullLive(){
+    return fetch(LIVE+'?t='+Date.now()).then(function(r){ if(!r.ok) throw new Error('bad'); return r.json(); })
+      .then(function(d){ if(d && Array.isArray(d.items)) items=d.items.map(norm); else items=SEED.map(function(x){return norm(Object.assign({},x));}); draw(); })
+      .catch(function(){ items=SEED.map(function(x){return norm(Object.assign({},x));}); draw(); });
+  }
   function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&','<':'<','>':'>','"':'"',"'":'&#39;'}[c];});}
   function badge(state){if(state==='sold')return{cls:'bg-hot',label:'Sold'};if(state==='hot')return{cls:'bg-hot',label:'Hot'};return{cls:'bg-volt text-pit',label:'Open'};}
   function picsOf(it){return (it.photos&&it.photos.length)?it.photos:(it.photo?[it.photo]:[]);}
-  function renderTicker(){var bits=items.map(function(it){return '<span class="'+(it.state==='open'?'text-volt':(it.state==='sold'?'text-orange':'text-hot'))+'">'+esc(it.sku)+' '+esc((it.state||'open').toUpperCase())+'</span>';});document.getElementById('ticker').innerHTML=(bits.join('')||'<span>LOT EMPTY</span>')+(bits.join('')||'');}
-  function renderGrid(){
+  function draw(){
+    var bits=items.map(function(it){return '<span class="'+(it.state==='open'?'text-volt':(it.state==='sold'?'text-orange':'text-hot'))+'">'+esc(it.sku)+' '+esc((it.state||'open').toUpperCase())+'</span>';});
+    document.getElementById('ticker').innerHTML=(bits.join('')||'<span>LOT EMPTY</span>')+(bits.join('')||'');
     document.getElementById('grid').innerHTML=items.map(function(it){
       var b=badge(it.state), pics=picsOf(it);
       var photo=pics.length?'<img data-gal="'+esc(it.id)+'" data-idx="0" src="'+pics[0]+'" class="h-full w-full object-cover cursor-pointer" alt="" />':'<div class="flex h-full items-center justify-center text-[10px] uppercase text-mute">Photo slot</div>';
-      var count=pics.length>1?'<span class="absolute bottom-3 left-3 bg-pit/80 px-2 py-0.5 text-[10px] uppercase tracking-widest text-lime">1/'+pics.length+' · tap</span>':'';
-      var hold=it.state==='sold'?'':'<a class="mt-4 inline-block border border-volt px-3 py-2 text-[11px] uppercase text-volt hover:bg-volt hover:text-pit" href="mailto:'+MAIL+'?subject=HOLD%20'+encodeURIComponent(it.sku+' '+it.title)+'">Hold '+esc(it.sku)+'</a>';
+      var count=pics.length>1?'<span class="absolute bottom-3 left-3 bg-pit/80 px-2 py-0.5 text-[10px] uppercase text-lime">1/'+pics.length+' · tap</span>':'';
+      var hold=it.state==='sold'?'':'<a class="mt-4 inline-block border border-volt px-3 py-2 text-[11px] uppercase text-volt" href="mailto:'+MAIL+'?subject=HOLD%20'+encodeURIComponent(it.sku+' '+it.title)+'">Hold '+esc(it.sku)+'</a>';
       var search=(it.sku+' '+it.title+' '+it.spec+' '+it.note).toLowerCase();
       return '<article class="ticket-card border '+(it.state==='hot'?'border-hot':'border-volt/30')+' bg-ticket" data-cat="'+esc(it.cat)+'" data-state="'+esc(it.state)+'" data-text="'+esc(search)+'">'+'<div class="flex justify-between border-b border-edge px-3 py-2"><span class="text-[10px] text-lime">#'+esc(it.sku)+'</span></div>'+'<div class="relative aspect-[4/3] border-b border-edge bg-pit overflow-hidden">'+photo+'<span class="absolute right-3 top-3 bg-amber px-2 py-1 text-xs font-semibold text-pit">$'+esc(it.price)+'</span><span class="absolute left-3 top-3 '+b.cls+' px-2 py-0.5 text-[10px] uppercase text-paper">'+b.label+'</span>'+count+'</div>'+'<div class="p-3"><h3 class="font-display text-lg font-bold">'+esc(it.title)+'</h3><p class="mt-1 text-[12px] text-mute">'+esc(it.spec)+'</p><p class="mt-2 text-[11px] uppercase '+(it.state==='open'?'text-volt':'text-hot')+'">'+esc(it.note)+'</p>'+hold+'</div></article>';
     }).join('');
     applyFilter();
+    renderAdminList();
   }
   function applyFilter(){var shown=0;document.querySelectorAll('.ticket-card').forEach(function(card){var ok=(filter==='all'||card.getAttribute('data-cat')===filter)&&(!q||(card.getAttribute('data-text')||'').indexOf(q)!==-1);card.classList.toggle('hidden-card',!ok);if(ok)shown++;});document.getElementById('count').textContent=String(shown);document.getElementById('empty').classList.toggle('hidden',shown!==0);}
-  function renderAdminList(){document.getElementById('admin-list').innerHTML=items.map(function(it){var pics=picsOf(it);var thumb=pics[0]?'<img src="'+pics[0]+'" class="h-14 w-16 object-cover" alt="" />':'<div class="h-14 w-16 bg-pit text-[9px] uppercase text-mute flex items-center justify-center">no pic</div>';return '<div class="flex items-center gap-3 border border-volt/20 bg-ticket p-3">'+thumb+'<div class="min-w-0 flex-1"><p class="truncate font-display font-bold">'+esc(it.title)+' <span class="text-[11px] text-mute">#'+esc(it.sku)+'</span></p><p class="text-[11px] text-mute">$'+esc(it.price)+' · '+esc(it.cat)+' · '+esc(it.state)+' · '+pics.length+' pics</p></div><button type="button" data-edit="'+esc(it.id)+'" class="border border-edge px-2 py-1 text-[10px] uppercase">Edit</button><button type="button" data-del="'+esc(it.id)+'" class="border border-hot px-2 py-1 text-[10px] uppercase text-hot">Del</button></div>';}).join('')||'<p class="text-sm text-mute">Lot is empty.</p>';}
+  function renderAdminList(){document.getElementById('admin-list').innerHTML=items.map(function(it){var pics=picsOf(it);var thumb=pics[0]?'<img src="'+pics[0]+'" class="h-14 w-16 object-cover" alt="" />':'<div class="h-14 w-16 bg-pit text-[9px] uppercase text-mute flex items-center justify-center">no pic</div>';return '<div class="flex items-center gap-3 border border-volt/20 bg-ticket p-3">'+thumb+'<div class="min-w-0 flex-1"><p class="truncate font-display font-bold">'+esc(it.title)+' <span class="text-[11px] text-mute">#'+esc(it.sku)+'</span></p><p class="text-[11px] text-mute">$'+esc(it.price)+' · '+esc(it.state)+' · '+pics.length+' pics</p></div><button type="button" data-edit="'+esc(it.id)+'" class="border border-edge px-2 py-1 text-[10px] uppercase">Edit</button><button type="button" data-del="'+esc(it.id)+'" class="border border-hot px-2 py-1 text-[10px] uppercase text-hot">Del</button></div>';}).join('')||'<p class="text-sm text-mute">Lot is empty.</p>';}
   function renderThumbs(){document.getElementById('f-thumbs').innerHTML=pendingPhotos.map(function(src,i){return '<div class="relative h-20 w-24 border border-edge"><img src="'+src+'" class="h-full w-full object-cover" alt="" /><button type="button" data-rm="'+i+'" class="absolute right-0 top-0 bg-hot px-1 text-[10px] text-paper">x</button></div>';}).join('');}
-  function refresh(){saveLocal();renderTicker();renderGrid();renderAdminList();}
+  function persist(){ draw(); publishLive(); }
   function resetForm(){document.getElementById('item-form').reset();document.getElementById('f-id').value='';pendingPhotos=[];renderThumbs();}
   function fillForm(it){document.getElementById('f-id').value=it.id;document.getElementById('f-sku').value=it.sku;document.getElementById('f-title').value=it.title;document.getElementById('f-price').value=it.price;document.getElementById('f-cat').value=it.cat;document.getElementById('f-state').value=it.state;document.getElementById('f-spec').value=it.spec||'';document.getElementById('f-note').value=it.note||'';pendingPhotos=picsOf(it).slice();renderThumbs();}
   function compressImage(file,cb){var img=new Image(),url=URL.createObjectURL(file);img.onload=function(){var max=720,w=img.width,h=img.height;if(w>max){h=Math.round(h*max/w);w=max;}var c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);URL.revokeObjectURL(url);cb(c.toDataURL('image/jpeg',0.72));};img.src=url;}
@@ -156,21 +165,18 @@
   function isAuthed(){return sessionStorage.getItem(AUTH)==='1';}
   document.querySelectorAll('.filter-btn').forEach(function(btn){btn.addEventListener('click',function(){filter=btn.getAttribute('data-filter');document.querySelectorAll('.filter-btn').forEach(function(b){var on=b===btn;b.classList.toggle('bg-volt',on);b.classList.toggle('border-volt',on);b.classList.toggle('text-pit',on);});applyFilter();});});
   document.getElementById('q').addEventListener('input',function(e){q=(e.target.value||'').toLowerCase().trim();applyFilter();});
-  document.getElementById('item-form').addEventListener('submit',function(e){e.preventDefault();var id=document.getElementById('f-id').value||document.getElementById('f-sku').value.trim();var next={id:id,sku:document.getElementById('f-sku').value.trim(),title:document.getElementById('f-title').value.trim(),spec:document.getElementById('f-spec').value.trim(),note:document.getElementById('f-note').value.trim(),price:Number(document.getElementById('f-price').value)||0,cat:document.getElementById('f-cat').value,state:document.getElementById('f-state').value,photos:pendingPhotos.slice()};var idx=items.findIndex(function(x){return x.id===id;});if(idx>=0)items[idx]=next;else items.unshift(next);resetForm();refresh();});
+  document.getElementById('item-form').addEventListener('submit',function(e){e.preventDefault();var id=document.getElementById('f-id').value||document.getElementById('f-sku').value.trim();var next={id:id,sku:document.getElementById('f-sku').value.trim(),title:document.getElementById('f-title').value.trim(),spec:document.getElementById('f-spec').value.trim(),note:document.getElementById('f-note').value.trim(),price:Number(document.getElementById('f-price').value)||0,cat:document.getElementById('f-cat').value,state:document.getElementById('f-state').value,photos:pendingPhotos.slice()};var idx=items.findIndex(function(x){return x.id===id;});if(idx>=0)items[idx]=next;else items.unshift(next);resetForm();persist();});
   document.getElementById('f-reset').addEventListener('click',resetForm);
   document.getElementById('f-photo').addEventListener('change',function(e){var files=e.target.files;if(!files||!files.length)return;var left=files.length;Array.prototype.forEach.call(files,function(file){compressImage(file,function(data){if(data)pendingPhotos.push(data);left--;if(!left)renderThumbs();});});e.target.value='';});
   document.getElementById('f-thumbs').addEventListener('click',function(e){var rm=e.target.getAttribute('data-rm');if(rm!=null){pendingPhotos.splice(Number(rm),1);renderThumbs();}});
   document.getElementById('grid').addEventListener('click',function(e){var img=e.target.closest('[data-gal]');if(!img)return;var id=img.getAttribute('data-gal');var it=items.find(function(x){return x.id===id;});if(!it)return;var pics=picsOf(it);if(pics.length<2)return;var idx=(Number(img.getAttribute('data-idx'))+1)%pics.length;img.setAttribute('data-idx',String(idx));img.src=pics[idx];var tag=img.parentNode.querySelector('.absolute.bottom-3');if(tag)tag.textContent=(idx+1)+'/'+pics.length+' · tap';});
-  document.getElementById('admin-list').addEventListener('click',function(e){var edit=e.target.getAttribute('data-edit'),del=e.target.getAttribute('data-del');if(edit){var it=items.find(function(x){return x.id===edit;});if(it)fillForm(it);}if(del&&confirm('Pull this ticket?')){items=items.filter(function(x){return x.id!==del;});refresh();}});
-  document.getElementById('btn-export').addEventListener('click',function(){var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(items,null,2)],{type:'application/json'}));a.download='lot.json';a.click();});
-  document.getElementById('btn-import').addEventListener('change',function(e){var file=e.target.files&&e.target.files[0];if(!file)return;var r=new FileReader();r.onload=function(){try{var p=JSON.parse(r.result);if(Array.isArray(p)){items=p.map(norm);refresh();}}catch(err){alert('Bad JSON');}};r.readAsText(file);});
+  document.getElementById('admin-list').addEventListener('click',function(e){var edit=e.target.getAttribute('data-edit'),del=e.target.getAttribute('data-del');if(edit){var it=items.find(function(x){return x.id===edit;});if(it)fillForm(it);}if(del&&confirm('Pull this ticket off the live lot?')){items=items.filter(function(x){return x.id!==del;});persist();}});
   document.getElementById('admin-close').addEventListener('click',closeAdmin);
   document.getElementById('pin-form').addEventListener('submit',function(e){e.preventDefault();if(document.getElementById('pin-input').value===PIN){sessionStorage.setItem(AUTH,'1');hidePin();openAdmin();}else document.getElementById('pin-err').classList.remove('hidden');});
   document.getElementById('pin-cancel').addEventListener('click',function(){hidePin();if(location.hash==='#admin')history.replaceState(null,'','#lot');});
   var taps=0,t;document.getElementById('lot-title').addEventListener('click',function(){taps++;clearTimeout(t);t=setTimeout(function(){taps=0;},900);if(taps>=5){taps=0;if(isAuthed())openAdmin();else askPin();}});
   window.addEventListener('hashchange',function(){if(location.hash==='#admin'){if(isAuthed())openAdmin();else askPin();}else closeAdmin();});
-  items=loadLocal()||SEED.map(function(x){return norm(Object.assign({},x));});
-  refresh();
+  pullLive();
   if(location.hash==='#admin'){if(isAuthed())openAdmin();else askPin();}
 })();
 </script>
