@@ -4,10 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>DNC COMPUTERZ — bench lot</title>
-  <meta name="description" content="Dee’s bench lot. Towers, laptops, parts, and screens with sticker prices. Local holds by email. No cart." />
   <script src="https://cdn.tailwindcss.com"></script>
   <script>tailwind.config={theme:{extend:{colors:{pit:'#080A0D',steel:'#12161C',ticket:'#181D26',edge:'#2C3340',mute:'#8B93A3',paper:'#E8ECF2',volt:'#4D8BFF',amber:'#F5C542',hot:'#FF2B3A'},fontFamily:{display:['Syne','sans-serif'],mono:['IBM Plex Mono','ui-monospace','monospace']}}}}</script>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
   <style>html{scroll-behavior:smooth}body{background:#080A0D}.ticket-card[data-state=sold]{opacity:.48}.hidden-card{display:none!important}#admin-panel{display:none}body.admin-open #admin-panel{display:block}body.admin-open main,body.admin-open header,body.admin-open footer,body.admin-open .ticker-wrap{display:none}</style>
 </head>
 <body class="font-mono text-paper antialiased bg-pit">
@@ -50,7 +49,7 @@
 </section>
 <section id="how" class="mx-auto max-w-6xl px-4 py-16">
   <h2 class="font-display text-3xl font-bold">Three steps. No cart.</h2>
-  <p class="mt-3 text-sm text-mute">Pick a ticket. Email the hold to dnccomputerz@gmail.com. Meet after Dee says yes.</p>
+  <p class="mt-3 text-sm text-mute">Pick a ticket. Email the hold. Tap a card photo to flip through shots.</p>
 </section>
 </main>
 <footer class="border-t border-edge px-4 py-8 text-center text-[11px] uppercase text-mute">DNC COMPUTERZ</footer>
@@ -60,7 +59,7 @@
       <h2 class="font-display text-3xl font-bold">Bench desk</h2>
       <button id="admin-close" type="button" class="border border-edge px-3 py-2 text-[11px] uppercase text-mute">Back to lot</button>
     </div>
-    <p class="mt-2 text-sm text-mute">Add tickets and photos. Saves on this device. PIN: bench</p>
+    <p class="mt-2 text-sm text-mute">Stack multiple photos on one SKU. PIN: bench</p>
     <form id="item-form" class="mt-8 grid gap-3 border border-edge bg-ticket p-4">
       <input type="hidden" id="f-id" />
       <div class="grid gap-3 sm:grid-cols-2">
@@ -72,8 +71,8 @@
         <label class="text-[11px] uppercase text-mute">Spec<input id="f-spec" class="mt-1 w-full border border-edge bg-pit px-3 py-2 text-sm" /></label>
       </div>
       <label class="text-[11px] uppercase text-mute">Note<input id="f-note" class="mt-1 w-full border border-edge bg-pit px-3 py-2 text-sm" /></label>
-      <label class="text-[11px] uppercase text-mute">Photo<input id="f-photo" type="file" accept="image/*" class="mt-1 block w-full text-sm" /></label>
-      <img id="f-preview" alt="" class="hidden max-h-40 object-cover" />
+      <label class="text-[11px] uppercase text-mute">Photos — pick several<input id="f-photo" type="file" accept="image/*" multiple class="mt-1 block w-full text-sm" /></label>
+      <div id="f-thumbs" class="flex flex-wrap gap-2"></div>
       <div class="flex gap-2">
         <button type="submit" class="bg-volt px-4 py-2 text-[11px] font-semibold uppercase text-pit">Save ticket</button>
         <button type="button" id="f-reset" class="border border-edge px-4 py-2 text-[11px] uppercase text-mute">Clear</button>
@@ -99,38 +98,42 @@
 </div>
 <script>
 (function(){
-  var PIN='bench', STORE='dnc-lot-v1', AUTH='dnc-auth', MAIL='dnccomputerz@gmail.com';
+  var PIN='bench', STORE='dnc-lot-v2', AUTH='dnc-auth', MAIL='dnccomputerz@gmail.com';
   var SEED=[
-    {id:'T-1842',sku:'T-1842',title:'Office tower i7',spec:'i7 · 16GB · 512 SSD · Win 11',note:'Tested · Good',price:180,cat:'towers',state:'open',photo:''},
-    {id:'L-0911',sku:'L-0911',title:'ThinkPad T480',spec:'i5 · 8GB · 256 SSD · 14in',note:'Battery ok · Fair+',price:220,cat:'laptops',state:'open',photo:''},
-    {id:'P-3304',sku:'P-3304',title:'RX 580 8GB',spec:'Dual fan · HDMI + DP',note:'Cleaned · Good',price:75,cat:'parts',state:'open',photo:''},
-    {id:'S-2208',sku:'S-2208',title:'24in 1080p panel',spec:'HDMI · stand included',note:'No dead pixels',price:45,cat:'screens',state:'open',photo:''},
-    {id:'T-0770',sku:'T-0770',title:'Quiet office SFF',spec:'i5 · 8GB · 256 SSD',note:'Off the bench',price:140,cat:'towers',state:'sold',photo:''},
-    {id:'L-4412',sku:'L-4412',title:'15in i5 daily',spec:'i5 · 8GB · 256 SSD · charger',note:'Scuffs · Works',price:160,cat:'laptops',state:'open',photo:''},
-    {id:'P-1180',sku:'P-1180',title:'16GB DDR4 kit',spec:'2x8 · 3200 · matched',note:'Moving fast',price:40,cat:'parts',state:'hot',photo:''},
-    {id:'S-0094',sku:'S-0094',title:'27in 1440p',spec:'IPS · DP · tilt stand',note:'Clean panel',price:95,cat:'screens',state:'open',photo:''}
+    {id:'T-1842',sku:'T-1842',title:'Office tower i7',spec:'i7 · 16GB · 512 SSD · Win 11',note:'Tested · Good',price:180,cat:'towers',state:'open',photos:[]},
+    {id:'L-0911',sku:'L-0911',title:'ThinkPad T480',spec:'i5 · 8GB · 256 SSD · 14in',note:'Battery ok · Fair+',price:220,cat:'laptops',state:'open',photos:[]},
+    {id:'P-3304',sku:'P-3304',title:'RX 580 8GB',spec:'Dual fan · HDMI + DP',note:'Cleaned · Good',price:75,cat:'parts',state:'open',photos:[]},
+    {id:'S-2208',sku:'S-2208',title:'24in 1080p panel',spec:'HDMI · stand included',note:'No dead pixels',price:45,cat:'screens',state:'open',photos:[]},
+    {id:'T-0770',sku:'T-0770',title:'Quiet office SFF',spec:'i5 · 8GB · 256 SSD',note:'Off the bench',price:140,cat:'towers',state:'sold',photos:[]},
+    {id:'L-4412',sku:'L-4412',title:'15in i5 daily',spec:'i5 · 8GB · 256 SSD · charger',note:'Scuffs · Works',price:160,cat:'laptops',state:'open',photos:[]},
+    {id:'P-1180',sku:'P-1180',title:'16GB DDR4 kit',spec:'2x8 · 3200 · matched',note:'Moving fast',price:40,cat:'parts',state:'hot',photos:[]},
+    {id:'S-0094',sku:'S-0094',title:'27in 1440p',spec:'IPS · DP · tilt stand',note:'Clean panel',price:95,cat:'screens',state:'open',photos:[]}
   ];
-  var items=[], filter='all', q='', pendingPhoto='';
-  function loadLocal(){try{var r=localStorage.getItem(STORE);if(r){var p=JSON.parse(r);if(Array.isArray(p)&&p.length)return p;}}catch(e){}return null;}
+  var items=[], filter='all', q='', pendingPhotos=[];
+  function norm(it){var photos=[]; if(Array.isArray(it.photos)) photos=it.photos.filter(Boolean); else if(it.photo) photos=[it.photo]; it.photos=photos; delete it.photo; return it;}
+  function loadLocal(){try{var r=localStorage.getItem(STORE)||localStorage.getItem('dnc-lot-v1'); if(r){var p=JSON.parse(r); if(Array.isArray(p)&&p.length) return p.map(norm);}}catch(e){} return null;}
   function saveLocal(){try{localStorage.setItem(STORE,JSON.stringify(items));}catch(e){}}
-  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&','<':'<','>':'>','"':'"','\'':'&#39;'}[c];});}
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&','<':'<','>':'>','"':'"',"'":'&#39;'}[c];});}
   function badge(state){if(state==='sold')return{cls:'bg-hot',label:'Sold'};if(state==='hot')return{cls:'bg-hot',label:'Hot'};return{cls:'bg-edge',label:'Open'};}
+  function picsOf(it){return (it.photos&&it.photos.length)?it.photos:(it.photo?[it.photo]:[]);}
   function renderTicker(){var bits=items.map(function(it){return '<span class="'+(it.state==='open'?'':'text-hot')+'">'+esc(it.sku)+' '+esc((it.state||'open').toUpperCase())+'</span>';});document.getElementById('ticker').innerHTML=(bits.join('')||'<span>LOT EMPTY</span>')+(bits.join('')||'');}
   function renderGrid(){
     document.getElementById('grid').innerHTML=items.map(function(it){
-      var b=badge(it.state);
-      var photo=it.photo?'<img src="'+it.photo+'" class="h-full w-full object-cover" alt="" />':'<div class="flex h-full items-center justify-center text-[10px] uppercase text-mute">Photo slot</div>';
+      var b=badge(it.state), pics=picsOf(it);
+      var photo=pics.length?'<img data-gal="'+esc(it.id)+'" data-idx="0" src="'+pics[0]+'" class="h-full w-full object-cover cursor-pointer" alt="" />':'<div class="flex h-full items-center justify-center text-[10px] uppercase text-mute">Photo slot</div>';
+      var count=pics.length>1?'<span class="absolute bottom-3 left-3 bg-pit/80 px-2 py-0.5 text-[10px] uppercase tracking-widest">1/'+pics.length+' · tap</span>':'';
       var hold=it.state==='sold'?'':'<a class="mt-4 inline-block border border-volt px-3 py-2 text-[11px] uppercase text-volt" href="mailto:'+MAIL+'?subject=HOLD%20'+encodeURIComponent(it.sku+' '+it.title)+'">Hold '+esc(it.sku)+'</a>';
       var search=(it.sku+' '+it.title+' '+it.spec+' '+it.note).toLowerCase();
-      return '<article class="ticket-card border '+(it.state==='hot'?'border-hot':'border-edge')+' bg-ticket" data-cat="'+esc(it.cat)+'" data-state="'+esc(it.state)+'" data-text="'+esc(search)+'">'+'<div class="flex justify-between border-b border-edge px-3 py-2"><span class="text-[10px] text-mute">#'+esc(it.sku)+'</span></div>'+'<div class="relative aspect-[4/3] border-b border-edge bg-pit overflow-hidden">'+photo+'<span class="absolute right-3 top-3 bg-amber px-2 py-1 text-xs font-semibold text-pit">$'+esc(it.price)+'</span><span class="absolute left-3 top-3 '+b.cls+' px-2 py-0.5 text-[10px] uppercase text-paper">'+b.label+'</span></div>'+'<div class="p-3"><h3 class="font-display text-lg font-bold">'+esc(it.title)+'</h3><p class="mt-1 text-[12px] text-mute">'+esc(it.spec)+'</p><p class="mt-2 text-[11px] uppercase '+(it.state==='open'?'text-volt':'text-hot')+'">'+esc(it.note)+'</p>'+hold+'</div></article>';
+      return '<article class="ticket-card border '+(it.state==='hot'?'border-hot':'border-edge')+' bg-ticket" data-cat="'+esc(it.cat)+'" data-state="'+esc(it.state)+'" data-text="'+esc(search)+'">'+'<div class="flex justify-between border-b border-edge px-3 py-2"><span class="text-[10px] text-mute">#'+esc(it.sku)+'</span></div>'+'<div class="relative aspect-[4/3] border-b border-edge bg-pit overflow-hidden">'+photo+'<span class="absolute right-3 top-3 bg-amber px-2 py-1 text-xs font-semibold text-pit">$'+esc(it.price)+'</span><span class="absolute left-3 top-3 '+b.cls+' px-2 py-0.5 text-[10px] uppercase text-paper">'+b.label+'</span>'+count+'</div>'+'<div class="p-3"><h3 class="font-display text-lg font-bold">'+esc(it.title)+'</h3><p class="mt-1 text-[12px] text-mute">'+esc(it.spec)+'</p><p class="mt-2 text-[11px] uppercase '+(it.state==='open'?'text-volt':'text-hot')+'">'+esc(it.note)+'</p>'+hold+'</div></article>';
     }).join('');
     applyFilter();
   }
   function applyFilter(){var shown=0;document.querySelectorAll('.ticket-card').forEach(function(card){var ok=(filter==='all'||card.getAttribute('data-cat')===filter)&&(!q||(card.getAttribute('data-text')||'').indexOf(q)!==-1);card.classList.toggle('hidden-card',!ok);if(ok)shown++;});document.getElementById('count').textContent=String(shown);document.getElementById('empty').classList.toggle('hidden',shown!==0);}
-  function renderAdminList(){document.getElementById('admin-list').innerHTML=items.map(function(it){return '<div class="flex items-center gap-3 border border-edge bg-ticket p-3">'+(it.photo?'<img src="'+it.photo+'" class="h-14 w-16 object-cover" alt="" />':'<div class="h-14 w-16 bg-pit text-[9px] uppercase text-mute flex items-center justify-center">no pic</div>')+'<div class="min-w-0 flex-1"><p class="truncate font-display font-bold">'+esc(it.title)+' <span class="text-[11px] text-mute">#'+esc(it.sku)+'</span></p><p class="text-[11px] text-mute">$'+esc(it.price)+' · '+esc(it.cat)+' · '+esc(it.state)+'</p></div><button type="button" data-edit="'+esc(it.id)+'" class="border border-edge px-2 py-1 text-[10px] uppercase">Edit</button><button type="button" data-del="'+esc(it.id)+'" class="border border-hot px-2 py-1 text-[10px] uppercase text-hot">Del</button></div>';}).join('')||'<p class="text-sm text-mute">Lot is empty.</p>';}
+  function renderAdminList(){document.getElementById('admin-list').innerHTML=items.map(function(it){var pics=picsOf(it);var thumb=pics[0]?'<img src="'+pics[0]+'" class="h-14 w-16 object-cover" alt="" />':'<div class="h-14 w-16 bg-pit text-[9px] uppercase text-mute flex items-center justify-center">no pic</div>';return '<div class="flex items-center gap-3 border border-edge bg-ticket p-3">'+thumb+'<div class="min-w-0 flex-1"><p class="truncate font-display font-bold">'+esc(it.title)+' <span class="text-[11px] text-mute">#'+esc(it.sku)+'</span></p><p class="text-[11px] text-mute">$'+esc(it.price)+' · '+esc(it.cat)+' · '+esc(it.state)+' · '+pics.length+' pics</p></div><button type="button" data-edit="'+esc(it.id)+'" class="border border-edge px-2 py-1 text-[10px] uppercase">Edit</button><button type="button" data-del="'+esc(it.id)+'" class="border border-hot px-2 py-1 text-[10px] uppercase text-hot">Del</button></div>';}).join('')||'<p class="text-sm text-mute">Lot is empty.</p>';}
+  function renderThumbs(){document.getElementById('f-thumbs').innerHTML=pendingPhotos.map(function(src,i){return '<div class="relative h-20 w-24 border border-edge"><img src="'+src+'" class="h-full w-full object-cover" alt="" /><button type="button" data-rm="'+i+'" class="absolute right-0 top-0 bg-hot px-1 text-[10px] text-paper">x</button></div>';}).join('');}
   function refresh(){saveLocal();renderTicker();renderGrid();renderAdminList();}
-  function resetForm(){document.getElementById('item-form').reset();document.getElementById('f-id').value='';pendingPhoto='';var p=document.getElementById('f-preview');p.src='';p.classList.add('hidden');}
-  function fillForm(it){document.getElementById('f-id').value=it.id;document.getElementById('f-sku').value=it.sku;document.getElementById('f-title').value=it.title;document.getElementById('f-price').value=it.price;document.getElementById('f-cat').value=it.cat;document.getElementById('f-state').value=it.state;document.getElementById('f-spec').value=it.spec||'';document.getElementById('f-note').value=it.note||'';pendingPhoto=it.photo||'';var p=document.getElementById('f-preview');if(pendingPhoto){p.src=pendingPhoto;p.classList.remove('hidden');}else{p.src='';p.classList.add('hidden');}}
+  function resetForm(){document.getElementById('item-form').reset();document.getElementById('f-id').value='';pendingPhotos=[];renderThumbs();}
+  function fillForm(it){document.getElementById('f-id').value=it.id;document.getElementById('f-sku').value=it.sku;document.getElementById('f-title').value=it.title;document.getElementById('f-price').value=it.price;document.getElementById('f-cat').value=it.cat;document.getElementById('f-state').value=it.state;document.getElementById('f-spec').value=it.spec||'';document.getElementById('f-note').value=it.note||'';pendingPhotos=picsOf(it).slice();renderThumbs();}
   function compressImage(file,cb){var img=new Image(),url=URL.createObjectURL(file);img.onload=function(){var max=720,w=img.width,h=img.height;if(w>max){h=Math.round(h*max/w);w=max;}var c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);URL.revokeObjectURL(url);cb(c.toDataURL('image/jpeg',0.72));};img.src=url;}
   function openAdmin(){document.body.classList.add('admin-open');history.replaceState(null,'','#admin');renderAdminList();}
   function closeAdmin(){document.body.classList.remove('admin-open');if(location.hash==='#admin')history.replaceState(null,'','#lot');}
@@ -139,18 +142,20 @@
   function isAuthed(){return sessionStorage.getItem(AUTH)==='1';}
   document.querySelectorAll('.filter-btn').forEach(function(btn){btn.addEventListener('click',function(){filter=btn.getAttribute('data-filter');document.querySelectorAll('.filter-btn').forEach(function(b){var on=b===btn;b.classList.toggle('bg-volt',on);b.classList.toggle('border-volt',on);b.classList.toggle('text-pit',on);b.classList.toggle('text-mute',!on);});applyFilter();});});
   document.getElementById('q').addEventListener('input',function(e){q=(e.target.value||'').toLowerCase().trim();applyFilter();});
-  document.getElementById('item-form').addEventListener('submit',function(e){e.preventDefault();var id=document.getElementById('f-id').value||document.getElementById('f-sku').value.trim();var next={id:id,sku:document.getElementById('f-sku').value.trim(),title:document.getElementById('f-title').value.trim(),spec:document.getElementById('f-spec').value.trim(),note:document.getElementById('f-note').value.trim(),price:Number(document.getElementById('f-price').value)||0,cat:document.getElementById('f-cat').value,state:document.getElementById('f-state').value,photo:pendingPhoto};var idx=items.findIndex(function(x){return x.id===id;});if(idx>=0)items[idx]=next;else items.unshift(next);resetForm();refresh();});
+  document.getElementById('item-form').addEventListener('submit',function(e){e.preventDefault();var id=document.getElementById('f-id').value||document.getElementById('f-sku').value.trim();var next={id:id,sku:document.getElementById('f-sku').value.trim(),title:document.getElementById('f-title').value.trim(),spec:document.getElementById('f-spec').value.trim(),note:document.getElementById('f-note').value.trim(),price:Number(document.getElementById('f-price').value)||0,cat:document.getElementById('f-cat').value,state:document.getElementById('f-state').value,photos:pendingPhotos.slice()};var idx=items.findIndex(function(x){return x.id===id;});if(idx>=0)items[idx]=next;else items.unshift(next);resetForm();refresh();});
   document.getElementById('f-reset').addEventListener('click',resetForm);
-  document.getElementById('f-photo').addEventListener('change',function(e){var file=e.target.files&&e.target.files[0];if(!file)return;compressImage(file,function(data){pendingPhoto=data;var p=document.getElementById('f-preview');if(data){p.src=data;p.classList.remove('hidden');}});});
+  document.getElementById('f-photo').addEventListener('change',function(e){var files=e.target.files;if(!files||!files.length)return;var left=files.length;Array.prototype.forEach.call(files,function(file){compressImage(file,function(data){if(data)pendingPhotos.push(data);left--;if(!left)renderThumbs();});});e.target.value='';});
+  document.getElementById('f-thumbs').addEventListener('click',function(e){var rm=e.target.getAttribute('data-rm');if(rm!=null){pendingPhotos.splice(Number(rm),1);renderThumbs();}});
+  document.getElementById('grid').addEventListener('click',function(e){var img=e.target.closest('[data-gal]');if(!img)return;var id=img.getAttribute('data-gal');var it=items.find(function(x){return x.id===id;});if(!it)return;var pics=picsOf(it);if(pics.length<2)return;var idx=(Number(img.getAttribute('data-idx'))+1)%pics.length;img.setAttribute('data-idx',String(idx));img.src=pics[idx];var tag=img.parentNode.querySelector('.absolute.bottom-3');if(tag)tag.textContent=(idx+1)+'/'+pics.length+' · tap';});
   document.getElementById('admin-list').addEventListener('click',function(e){var edit=e.target.getAttribute('data-edit'),del=e.target.getAttribute('data-del');if(edit){var it=items.find(function(x){return x.id===edit;});if(it)fillForm(it);}if(del&&confirm('Pull this ticket?')){items=items.filter(function(x){return x.id!==del;});refresh();}});
   document.getElementById('btn-export').addEventListener('click',function(){var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(items,null,2)],{type:'application/json'}));a.download='lot.json';a.click();});
-  document.getElementById('btn-import').addEventListener('change',function(e){var file=e.target.files&&e.target.files[0];if(!file)return;var r=new FileReader();r.onload=function(){try{var p=JSON.parse(r.result);if(Array.isArray(p)){items=p;refresh();}}catch(err){alert('Bad JSON');}};r.readAsText(file);});
+  document.getElementById('btn-import').addEventListener('change',function(e){var file=e.target.files&&e.target.files[0];if(!file)return;var r=new FileReader();r.onload=function(){try{var p=JSON.parse(r.result);if(Array.isArray(p)){items=p.map(norm);refresh();}}catch(err){alert('Bad JSON');}};r.readAsText(file);});
   document.getElementById('admin-close').addEventListener('click',closeAdmin);
   document.getElementById('pin-form').addEventListener('submit',function(e){e.preventDefault();if(document.getElementById('pin-input').value===PIN){sessionStorage.setItem(AUTH,'1');hidePin();openAdmin();}else document.getElementById('pin-err').classList.remove('hidden');});
   document.getElementById('pin-cancel').addEventListener('click',function(){hidePin();if(location.hash==='#admin')history.replaceState(null,'','#lot');});
   var taps=0,t;document.getElementById('lot-title').addEventListener('click',function(){taps++;clearTimeout(t);t=setTimeout(function(){taps=0;},900);if(taps>=5){taps=0;if(isAuthed())openAdmin();else askPin();}});
   window.addEventListener('hashchange',function(){if(location.hash==='#admin'){if(isAuthed())openAdmin();else askPin();}else closeAdmin();});
-  items=loadLocal()||SEED.map(function(x){return Object.assign({},x);});
+  items=loadLocal()||SEED.map(function(x){return norm(Object.assign({},x));});
   refresh();
   if(location.hash==='#admin'){if(isAuthed())openAdmin();else askPin();}
 })();
